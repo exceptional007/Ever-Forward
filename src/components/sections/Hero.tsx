@@ -88,7 +88,7 @@ export const Hero = memo(function Hero() {
           <span className="relative inline-flex overflow-hidden">
             <motion.span
               key={role}
-              initial={reduced ? undefined : { y: "100%", opacity: 0, filter: "blur(6px)" }}
+              initial={reduced ? false : { y: "100%", opacity: 0, filter: "blur(6px)" }}
               animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
               transition={{ duration: 0.6, ease }}
               className="bg-clip-text font-semibold text-transparent accent-gradient"
@@ -152,7 +152,7 @@ export const Hero = memo(function Hero() {
         className="mt-20 inline-flex w-fit items-center gap-2 text-[0.7rem] font-semibold tracking-[0.22em] text-muted-foreground uppercase transition-colors hover:text-foreground"
       >
         <motion.span
-          animate={reduced ? undefined : { y: [0, 5, 0] }}
+          animate={reduced ? { y: 0 } : { y: [0, 5, 0] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           className="grid size-8 place-items-center rounded-full border border-border"
         >
