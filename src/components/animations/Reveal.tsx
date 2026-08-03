@@ -3,7 +3,7 @@ import { motion, useReducedMotion } from "motion/react";
 import { ease, viewportOnce } from "@/lib/motion";
 
 type RevealProps = {
-  children: ReactNode;
+  children?: ReactNode;
   delay?: number;
   y?: number;
   blur?: boolean;
