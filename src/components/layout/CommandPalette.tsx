@@ -1,6 +1,5 @@
 import { memo, useEffect, useMemo, useState } from "react";
 import {
-  Command,
   CommandDialog,
   CommandEmpty,
   CommandGroup,
@@ -56,9 +55,8 @@ export const CommandPalette = memo(function CommandPalette({ open, onOpenChange 
   );
 
   return (
-    <CommandDialog open={open} onOpenChange={onOpenChange} title="Command palette">
-      <Command>
-        <CommandInput placeholder="Jump to a section or run an action…" />
+    <CommandDialog open={open} onOpenChange={onOpenChange}>
+      <CommandInput placeholder="Jump to a section or run an action…" />
         <CommandList>
           <CommandEmpty>No results.</CommandEmpty>
           <CommandGroup heading="Navigate">
@@ -91,8 +89,7 @@ export const CommandPalette = memo(function CommandPalette({ open, onOpenChange 
               </CommandItem>
             ))}
           </CommandGroup>
-        </CommandList>
-      </Command>
+      </CommandList>
     </CommandDialog>
   );
 });
