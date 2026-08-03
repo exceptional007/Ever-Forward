@@ -1,24 +1,78 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "@/components/layout/Navbar";
+import { Background } from "@/components/layout/Background";
+import { ScrollProgress } from "@/components/layout/ScrollProgress";
+import { CustomCursor } from "@/components/layout/CustomCursor";
+import { CommandPalette, useCommandPalette } from "@/components/layout/CommandPalette";
+import { Footer } from "@/components/layout/Footer";
+import { Hero } from "@/components/sections/Hero";
+import { About } from "@/components/sections/About";
+import { Skills } from "@/components/sections/Skills";
+import { Experience } from "@/components/sections/Experience";
+import { Projects } from "@/components/sections/Projects";
+import { Achievements } from "@/components/sections/Achievements";
+import { Resume } from "@/components/sections/Resume";
+import { Contact } from "@/components/sections/Contact";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const title = "Akshhat Srivastava — Software & AI Engineer";
+const description =
+  "Portfolio of Akshhat Srivastava: full-stack and AI engineer building RAG pipelines, layered .NET/FastAPI services and React products.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "/" }],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Person",
+          name: "Akshhat Srivastava",
+          jobTitle: "Software Engineer / AI Engineer",
+          email: "mailto:akshhatsri7843@gmail.com",
+          address: { "@type": "PostalAddress", addressLocality: "Gorakhpur", addressCountry: "IN" },
+          sameAs: [
+            "https://github.com/exceptional007",
+            "https://www.linkedin.com/in/akshhat-srivastava-11a13530b",
+            "https://leetcode.com/u/akshhat007/",
+          ],
+        }),
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
+  const { open, setOpen } = useCommandPalette();
+
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <Background />
+      <ScrollProgress />
+      <CustomCursor />
+      <Navbar onOpenPalette={() => setOpen(true)} />
+      <CommandPalette open={open} onOpenChange={setOpen} />
+      <main className="relative">
+        <Hero />
+        <About />
+        <Skills />
+        <Experience />
+        <Projects />
+        <Achievements />
+        <Resume />
+        <Contact />
+      </main>
+      <Footer />
+    </>
   );
 }
