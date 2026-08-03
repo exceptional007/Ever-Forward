@@ -41,7 +41,7 @@ export const Navbar = memo(function Navbar({ onOpenPalette }: NavbarProps) {
           <span className="grid size-8 place-items-center rounded-xl accent-gradient text-[0.7rem] font-bold text-primary-foreground">
             AS
           </span>
-          <span className="hidden text-foreground sm:inline">Akshhat</span>
+          <span className="hidden text-foreground sm:inline">Akshhat Srivastava</span>
         </button>
 
         <ul className="hidden items-center gap-1 lg:flex">

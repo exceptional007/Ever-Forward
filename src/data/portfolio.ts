@@ -249,6 +249,7 @@ export type Project = {
   stack: string[];
   tags: string[];
   featured: boolean;
+  image?: string;
   links: { github?: string; live?: string };
 };
 
@@ -272,7 +273,8 @@ export const projects: Project[] = [
     stack: ["React", "FastAPI", "PostgreSQL", "OpenAI", "Vector search"],
     tags: ["AI/ML", "Full-stack"],
     featured: true,
-    links: { github: profile.socials.github },
+    links: { github: "https://github.com/exceptional007/inca-intelligent-campus-assistant.git", live: "https://incaweb.netlify.app/" },
+    image: "/inca.png",
   },
   {
     slug: "fraud-portal",
@@ -294,6 +296,7 @@ export const projects: Project[] = [
     tags: ["AI/ML", "Backend"],
     featured: true,
     links: {},
+    image: "/smartinvestigation.png",
   },
   {
     slug: "patient-farmer",
@@ -315,6 +318,7 @@ export const projects: Project[] = [
     tags: ["Full-stack", "Backend"],
     featured: true,
     links: {},
+    image: "/patientfarmer.png",
   },
   {
     slug: "project-management",
@@ -335,7 +339,8 @@ export const projects: Project[] = [
     stack: ["Node.js", "Express", "MongoDB", "Cloudinary", "Mailtrap"],
     tags: ["Backend"],
     featured: false,
-    links: { github: profile.socials.github },
+    links: { github: "https://github.com/exceptional007/Project-Camp-Backend.git", live: "https://www.youtube.com/watch?v=vRuK1ZM_fWI&feature=youtu.be" },
+    image: "/projectmanagement.jpg",
   },
   {
     slug: "talent-tagger",
@@ -355,7 +360,8 @@ export const projects: Project[] = [
     stack: ["Python", "NLP", "Render", "Vercel"],
     tags: ["AI/ML", "Backend"],
     featured: false,
-    links: { github: profile.socials.github },
+    links: { github: "https://github.com/exceptional007/TalentTagger.git", live: "https://talent-tagger.netlify.app/" },
+    image: "/talenttagger.png",
   },
   {
     slug: "find-my-worker",
@@ -376,7 +382,11 @@ export const projects: Project[] = [
     stack: ["Django", "PostgreSQL", "AWS S3", "HTML/CSS"],
     tags: ["Full-stack"],
     featured: false,
-    links: { github: profile.socials.github },
+    links: {
+      github: "https://github.com/exceptional007/Find-My-Worker.git",
+      live: "https://find-my-worker-fmy.vercel.app/",
+    },
+    image: "/fmy.png",
   },
 ];
 

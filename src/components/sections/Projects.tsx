@@ -20,6 +20,25 @@ const ProjectCard = memo(function ProjectCard({ project }: { project: Project })
           aria-hidden
           className="relative h-40 overflow-hidden border-b border-border bg-surface-strong"
         >
+          {project.image ? (
+            <img
+              src={project.image}
+              alt={`Screenshot of ${project.title}`}
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-b-[1.75rem] bg-slate-950/10 px-5 text-center text-sm text-muted-foreground">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-surface-strong text-primary">
+                <Search className="size-5" aria-hidden />
+              </div>
+              <div>
+                <p className="font-semibold text-foreground">Project preview</p>
+                <p className="mt-1 text-[0.72rem] text-muted-foreground">
+                  Add a screenshot or illustration for this project later.
+                </p>
+              </div>
+            </div>
+          )}
           <div className="absolute inset-0 grid-lines opacity-60 transition-transform duration-[1200ms] group-hover:scale-110" />
           <div className="absolute inset-0 bg-linear-to-t from-card via-card/40 to-transparent" />
           <div className="absolute -top-8 -right-6 size-40 rounded-full bg-primary/20 blur-3xl transition-opacity duration-700 group-hover:opacity-100 sm:opacity-60" />
@@ -117,17 +136,18 @@ const ProjectCard = memo(function ProjectCard({ project }: { project: Project })
                 Code
               </a>
             )}
-            {project.links.live && (
+            {((project.links.live || project.links.github) && (
               <a
-                href={project.links.live}
+                href={project.links.live ?? project.links.github}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-border px-4 py-2 text-[0.75rem] font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+                aria-label={project.links.live ? `View live project ${project.title}` : `View project ${project.title}`}
               >
                 <ExternalLink className="size-3.5" aria-hidden />
-                Live
+                {project.links.live ? "Live" : "View"}
               </a>
-            )}
+            ))}
           </div>
         </div>
       </article>

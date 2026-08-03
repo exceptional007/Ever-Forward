@@ -80,6 +80,13 @@ export const Hero = memo(function Hero() {
           Srivastava
         </motion.h1>
 
+        <motion.p
+          variants={fadeUp}
+          className="mt-4 text-sm uppercase tracking-[0.22em] text-primary"
+        >
+          Unbroken. Unstoppable. Unfinished.
+        </motion.p>
+
         <motion.div
           variants={fadeUp}
           className="mt-7 flex h-8 items-center gap-3 text-lg font-medium sm:text-2xl"
