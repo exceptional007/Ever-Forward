@@ -1,105 +1,151 @@
 import { memo } from "react";
-import { motion } from "motion/react";
-import { Award, BadgeCheck, Quote, Trophy } from "lucide-react";
+import { BadgeCheckIcon, QuoteIcon, TrophyIcon } from "lucide-react";
 import { achievements, certifications, testimonials } from "@/data/portfolio";
-import { Section } from "@/components/layout/Section";
-import { Reveal } from "@/components/animations/Reveal";
-import { ease, viewportOnce } from "@/lib/motion";
+import { SectionHeading } from "@/components/layout/Section";
+import { SectionBackground } from "@/components/layout/SectionBackground";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
+function getAwardBadge(award: string) {
+  const a = award.toLowerCase();
+  if (a.includes("1st") || a.includes("runner")) {
+    return "bg-[#3b9eff]/10 text-[#3b9eff] border-transparent group-hover:border-[#3b9eff]/30";
+  }
+  if (a.includes("active")) {
+    return "bg-[#11ff99]/10 text-[#11ff99] border-transparent group-hover:border-[#11ff99]/30";
+  }
+  return "bg-white/05 text-[#fcfdff] border-transparent group-hover:border-white/14";
+}
+
+function getCertBadge(issuer: string) {
+  if (issuer.toLowerCase().includes("nptel")) {
+    return "bg-[#3b9eff]/10 text-[#3b9eff] border-transparent group-hover:border-[#3b9eff]/30";
+  }
+  return "bg-white/05 text-[#a1a4a5] border-transparent group-hover:border-white/10";
+}
 
 export const Achievements = memo(function Achievements() {
   return (
-    <Section
+    <section
+      aria-labelledby="achievements-heading"
       id="achievements"
-      index="05"
-      eyebrow="Recognition"
-      title={
-        <>
-          Competitions, certifications and{" "}
-          <span className="bg-clip-text text-transparent accent-gradient">what people say</span>.
-        </>
-      }
-      description="Three hackathon podiums, an NPTEL elite certification from IIT Roorkee, and words from the people I've shipped alongside."
+      className="relative overflow-hidden w-full py-6"
     >
-      <div className="grid gap-4 lg:grid-cols-2">
-        <div className="space-y-4">
-          <Reveal className="flex items-center gap-2 text-[0.68rem] font-semibold tracking-[0.24em] text-muted-foreground uppercase">
-            <Trophy className="size-3.5 text-primary" aria-hidden />
-            Achievements
-          </Reveal>
-          {achievements.map((a, i) => (
-            <Reveal
-              key={a.title}
-              delay={i * 0.07}
-              className="group glass rounded-3xl p-5 transition-all duration-500 hover:-translate-y-0.5 hover:border-primary/40"
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div className="min-w-0">
-                  <h3 className="text-[0.95rem] font-semibold tracking-tight text-foreground">
-                    {a.title}
-                  </h3>
-                  <p className="mt-1 font-mono text-[0.65rem] tracking-widest text-muted-foreground">
-                    {a.period}
-                  </p>
-                </div>
-                <span className="shrink-0 rounded-full accent-gradient px-3 py-1 text-[0.62rem] font-semibold tracking-wide text-primary-foreground">
-                  {a.award}
-                </span>
-              </div>
-              <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{a.detail}</p>
-            </Reveal>
-          ))}
-        </div>
+      <SectionBackground variant="achievements" />
+      <div className="relative z-10">
+        <SectionHeading id="achievements-heading">Achievements & Recognition</SectionHeading>
 
-        <div className="space-y-4">
-          <Reveal className="flex items-center gap-2 text-[0.68rem] font-semibold tracking-[0.24em] text-muted-foreground uppercase">
-            <BadgeCheck className="size-3.5 text-primary" aria-hidden />
-            Certifications
-          </Reveal>
-          {certifications.map((c, i) => (
-            <Reveal
-              key={c.title}
-              delay={i * 0.07}
-              className="group glass rounded-3xl p-5 transition-all duration-500 hover:-translate-y-0.5 hover:border-primary/40"
-            >
-              <div className="flex items-start gap-3">
-                <Award className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
-                <div className="min-w-0">
-                  <h3 className="text-[0.95rem] leading-snug font-semibold tracking-tight text-foreground">
-                    {c.title}
-                  </h3>
-                  <p className="mt-1 text-[0.75rem] text-primary">{c.issuer}</p>
-                  <p className="mt-0.5 font-mono text-[0.65rem] tracking-widest text-muted-foreground">
-                    {c.period}
-                  </p>
-                  <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">{c.detail}</p>
+        <div className="flex flex-col gap-6 px-4 py-4 sm:px-6">
+          {/* Hackathon Podiums */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold tracking-wider text-[#a1a4a5] uppercase">
+              <TrophyIcon className="size-3.5 text-[#3b9eff]" />
+              <span>Hackathons & Competitions</span>
+            </div>
+
+            <div className="flex flex-col gap-2.5">
+              {achievements.map((item) => (
+                <div
+                  key={item.title}
+                  className="group relative flex flex-col gap-1.5 rounded-xl border border-transparent bg-[#08080c] p-3.5 sm:p-4 transition-all duration-200 hover:border-white/20 hover:bg-[#0c0c10]"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 flex-wrap min-w-0">
+                      <h3 className="text-xs sm:text-sm font-semibold text-[#fcfdff]">
+                        {item.title}
+                      </h3>
+                      <span
+                        className={`font-mono text-2xs py-0.5 px-2.5 rounded-full border transition-colors ${getAwardBadge(
+                          item.award,
+                        )}`}
+                      >
+                        {item.award}
+                      </span>
+                    </div>
+
+                    <span className="font-mono text-2xs text-[#a1a4a5] bg-[#101014] border border-transparent group-hover:border-white/10 px-2.5 py-0.5 rounded-full shrink-0 transition-colors">
+                      {item.period}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-[#a1a4a5] leading-relaxed">{item.detail}</p>
                 </div>
-              </div>
-            </Reveal>
-          ))}
+              ))}
+            </div>
+          </div>
+
+          {/* Certifications */}
+          <div className="flex flex-col gap-3 pt-2">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold tracking-wider text-[#a1a4a5] uppercase">
+              <BadgeCheckIcon className="size-3.5 text-[#11ff99]" />
+              <span>Certifications & Training</span>
+            </div>
+
+            <div className="flex flex-col gap-2.5">
+              {certifications.map((c) => (
+                <div
+                  key={c.title}
+                  className="group relative flex flex-col gap-1.5 rounded-xl border border-transparent bg-[#08080c] p-3.5 sm:p-4 transition-all duration-200 hover:border-white/20 hover:bg-[#0c0c10]"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 flex-wrap min-w-0">
+                      <h3 className="text-xs sm:text-sm font-semibold text-[#fcfdff]">{c.title}</h3>
+                      <span
+                        className={`font-mono text-2xs py-0.5 px-2.5 rounded-full border transition-colors ${getCertBadge(
+                          c.issuer,
+                        )}`}
+                      >
+                        {c.issuer}
+                      </span>
+                    </div>
+
+                    <span className="font-mono text-2xs text-[#a1a4a5] bg-[#101014] border border-transparent group-hover:border-white/10 px-2.5 py-0.5 rounded-full shrink-0 transition-colors">
+                      {c.period}
+                    </span>
+                  </div>
+
+                  <p className="text-xs text-[#a1a4a5] leading-relaxed">{c.detail}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Testimonials */}
+          <div className="flex flex-col gap-3 pt-2">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold tracking-wider text-[#a1a4a5] uppercase">
+              <QuoteIcon className="size-3.5 text-[#3b9eff]" />
+              <span>Mentor & Lead Endorsements</span>
+            </div>
+
+            <div className="grid gap-3.5 sm:grid-cols-3">
+              {testimonials.map((t) => (
+                <div
+                  key={t.name}
+                  className="group relative flex flex-col justify-between rounded-xl border border-transparent bg-[#08080c] p-4 text-xs transition-all duration-200 hover:border-white/20 hover:bg-[#0c0c10]"
+                >
+                  <p className="italic text-[#a1a4a5] mb-4 leading-relaxed">
+                    &quot;{t.quote}&quot;
+                  </p>
+                  <div className="flex items-center gap-2.5 border-t border-transparent group-hover:border-white/06 pt-3 transition-colors">
+                    <Avatar className="size-7 rounded-full border border-transparent group-hover:border-white/14 bg-[#101012] transition-colors">
+                      <AvatarFallback className="text-2xs font-bold font-mono text-[#fcfdff] bg-[#101012]">
+                        {t.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-semibold text-[#fcfdff] text-xs">{t.name}</p>
+                      <p className="text-2xs text-[#a1a4a5]">{t.role}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
-
-      <div className="mt-14 grid gap-4 md:grid-cols-3">
-        {testimonials.map((t, i) => (
-          <motion.figure
-            key={t.name}
-            initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
-            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            viewport={viewportOnce}
-            transition={{ duration: 0.7, delay: i * 0.1, ease }}
-            className="glass flex flex-col rounded-3xl p-6"
-          >
-            <Quote className="size-5 text-primary/60" aria-hidden />
-            <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-foreground">
-              {t.quote}
-            </blockquote>
-            <figcaption className="mt-5 border-t border-border pt-4">
-              <p className="text-[0.85rem] font-semibold text-foreground">{t.name}</p>
-              <p className="text-[0.72rem] text-muted-foreground">{t.role}</p>
-            </figcaption>
-          </motion.figure>
-        ))}
-      </div>
-    </Section>
+    </section>
   );
 });

@@ -1,148 +1,292 @@
-import { memo, useCallback, useState } from "react";
-import { motion } from "motion/react";
-import { ArrowUpRight, Check, Copy, Github, Linkedin, Mail, MapPin, Phone, Code2 } from "lucide-react";
-import { profile } from "@/data/portfolio";
-import { Section } from "@/components/layout/Section";
-import { Reveal } from "@/components/animations/Reveal";
-import { Magnetic } from "@/components/animations/Magnetic";
-import { ease } from "@/lib/motion";
+import { memo, useState } from "react";
+import {
+  FileTextIcon,
+  GithubIcon,
+  LinkedinIcon,
+  MailIcon,
+  PhoneIcon,
+  Code2Icon,
+  SendIcon,
+  CheckIcon,
+  CopyIcon,
+  ExternalLinkIcon,
+} from "lucide-react";
+import { profile, RESUME_URL } from "@/data/portfolio";
+import { SectionHeading } from "@/components/layout/Section";
+import { SectionBackground } from "@/components/layout/SectionBackground";
+import { FieldGroup, Field, FieldLabel, FieldError } from "@/components/ui/field";
+import { InputGroup, InputGroupInput, InputGroupTextarea } from "@/components/ui/input-group";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
-const channels = [
-  { label: "GitHub", value: "exceptional007", href: profile.socials.github, Icon: Github },
+const socialLinks = [
   {
-    label: "LinkedIn",
-    value: "akshhat-srivastava",
-    href: profile.socials.linkedin,
-    Icon: Linkedin,
+    name: "GitHub",
+    label: "@exceptional007",
+    href: profile.socials.github,
+    Icon: GithubIcon,
+    accent: "hover:border-white/30 hover:shadow-[0_0_15px_rgba(255,255,255,0.1)]",
   },
-  { label: "LeetCode", value: "akshhat007", href: profile.socials.leetcode, Icon: Code2 },
+  {
+    name: "LinkedIn",
+    label: "Akshhat Srivastava",
+    href: profile.socials.linkedin,
+    Icon: LinkedinIcon,
+    accent: "hover:border-[#0A66C2]/40 hover:shadow-[0_0_15px_rgba(10,102,194,0.25)]",
+  },
+  {
+    name: "LeetCode",
+    label: "@akshhat007",
+    href: profile.socials.leetcode,
+    Icon: Code2Icon,
+    accent: "hover:border-[#FFA116]/40 hover:shadow-[0_0_15px_rgba(255,161,22,0.25)]",
+  },
+  {
+    name: "Résumé",
+    label: "Download PDF",
+    href: RESUME_URL,
+    Icon: FileTextIcon,
+    accent: "hover:border-[#11ff99]/40 hover:shadow-[0_0_15px_rgba(17,255,153,0.2)]",
+  },
 ];
 
 export const Contact = memo(function Contact() {
-  const [copied, setCopied] = useState(false);
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [errors, setErrors] = useState<{ name?: string; email?: string; message?: string }>({});
+  const [sent, setSent] = useState(false);
+  const [copiedField, setCopiedField] = useState<string | null>(null);
 
-  const copyEmail = useCallback(async () => {
-    try {
-      await navigator.clipboard.writeText(profile.email);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 1800);
-    } catch {
-      setCopied(false);
+  const handleCopy = (text: string, field: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedField(field);
+    setTimeout(() => setCopiedField(null), 2000);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const newErrors: { name?: string; email?: string; message?: string } = {};
+
+    if (!formData.name.trim()) newErrors.name = "Name is required.";
+    if (!formData.email.trim() || !formData.email.includes("@"))
+      newErrors.email = "Valid email is required.";
+    if (!formData.message.trim()) newErrors.message = "Message cannot be empty.";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
     }
-  }, []);
+
+    setErrors({});
+    setSent(true);
+    window.location.href = `mailto:${profile.email}?subject=Portfolio Inquiry from ${encodeURIComponent(
+      formData.name,
+    )}&body=${encodeURIComponent(formData.message)}`;
+  };
 
   return (
-    <Section
+    <section
+      aria-labelledby="connect-heading"
       id="contact"
-      index="07"
-      eyebrow="Contact"
-      title={
-        <>
-          Let&apos;s build something{" "}
-          <span className="bg-clip-text text-transparent accent-gradient">worth shipping</span>.
-        </>
-      }
-      description={`${profile.availability}. The fastest way to reach me is email — I reply within a day.`}
+      className="relative overflow-hidden w-full py-8"
     >
-      <div className="grid gap-5 lg:grid-cols-[1.2fr_1fr]">
-        <Reveal className="glass relative overflow-hidden rounded-[1.75rem] p-8 sm:p-10">
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -bottom-24 -left-20 size-72 rounded-full bg-primary/15 blur-3xl"
-          />
-          <p className="text-[0.68rem] font-semibold tracking-[0.24em] text-muted-foreground uppercase">
-            Email me
-          </p>
-          <a
-            href={`mailto:${profile.email}`}
-            className="mt-4 inline-flex items-baseline gap-2 text-xl font-semibold tracking-tight text-foreground transition-colors hover:text-primary sm:text-3xl"
-          >
-            {profile.email}
-            <ArrowUpRight className="size-5 shrink-0 text-primary" aria-hidden />
-          </a>
+      <SectionBackground variant="contact" />
+      <div className="relative z-10">
+        <SectionHeading id="connect-heading">Connect</SectionHeading>
 
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Magnetic strength={0.2}>
-              <a
-                href={`mailto:${profile.email}`}
-                className="inline-flex min-h-11 items-center gap-2 rounded-full accent-gradient px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lift transition-transform duration-300 hover:scale-[1.03]"
-              >
-                <Mail className="size-4" aria-hidden />
-                Start a conversation
-              </a>
-            </Magnetic>
-            <button
-              onClick={copyEmail}
-              className="inline-flex min-h-11 items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
-            >
-              <motion.span
-                key={copied ? "done" : "idle"}
-                initial={{ scale: 0.6, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.25, ease }}
-                className="grid place-items-center"
-              >
-                {copied ? (
-                  <Check className="size-4 text-primary" aria-hidden />
-                ) : (
-                  <Copy className="size-4" aria-hidden />
-                )}
-              </motion.span>
-              {copied ? "Copied" : "Copy address"}
-            </button>
+        <div className="px-4 py-6 sm:px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
+            {/* Left Column: Direct Contact & Social Hub */}
+            <div className="lg:col-span-5 flex flex-col gap-4">
+              <div className="rounded-2xl border border-transparent bg-[#08080c] p-5 sm:p-6 flex flex-col gap-4">
+                <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[#a1a4a5]">
+                  Direct Contact
+                </h3>
+
+                {/* Email Copy Card */}
+                <div className="group relative flex items-center justify-between rounded-xl border border-transparent bg-[#101012] p-3.5 transition-all duration-200 hover:border-white/20 hover:bg-[#141418]">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#18181c] border border-transparent group-hover:border-white/10 text-[#3b9eff] transition-colors">
+                      <MailIcon className="size-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-mono text-2xs text-[#a1a4a5]">Email</p>
+                      <p className="font-mono text-xs font-medium text-[#fcfdff] truncate">
+                        {profile.email}
+                      </p>
+                    </div>
+                  </div>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => handleCopy(profile.email, "email")}
+                        className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-transparent bg-[#18181c] text-[#a1a4a5] hover:text-[#fcfdff] hover:border-white/20 transition-colors"
+                        aria-label="Copy email"
+                      >
+                        {copiedField === "email" ? (
+                          <CheckIcon className="size-3.5 text-[#11ff99]" />
+                        ) : (
+                          <CopyIcon className="size-3.5" />
+                        )}
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent className="text-2xs bg-[#18181b] text-white">
+                      {copiedField === "email" ? "Copied!" : "Copy email"}
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+
+                {/* Phone Copy Card */}
+                <div className="group relative flex items-center justify-between rounded-xl border border-transparent bg-[#101012] p-3.5 transition-all duration-200 hover:border-white/20 hover:bg-[#141418]">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-[#18181c] border border-transparent group-hover:border-white/10 text-[#11ff99] transition-colors">
+                      <PhoneIcon className="size-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-mono text-2xs text-[#a1a4a5]">Phone</p>
+                      <p className="font-mono text-xs font-medium text-[#fcfdff] truncate">
+                        {profile.phone}
+                      </p>
+                    </div>
+                  </div>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={() => handleCopy(profile.phone, "phone")}
+                        className="flex size-8 shrink-0 items-center justify-center rounded-lg border border-transparent bg-[#18181c] text-[#a1a4a5] hover:text-[#fcfdff] hover:border-white/20 transition-colors"
+                        aria-label="Copy phone"
+                      >
+                        {copiedField === "phone" ? (
+                          <CheckIcon className="size-3.5 text-[#11ff99]" />
+                        ) : (
+                          <CopyIcon className="size-3.5" />
+                        )}
+                      </button>
+                    </TooltipTrigger>
+                    <TooltipContent className="text-2xs bg-[#18181b] text-white">
+                      {copiedField === "phone" ? "Copied!" : "Copy phone"}
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </div>
+
+              {/* Social Link Cards Grid */}
+              <div className="grid grid-cols-2 gap-3">
+                {socialLinks.map((s) => (
+                  <a
+                    key={s.name}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`group relative flex flex-col justify-between rounded-xl border border-transparent bg-[#08080c] p-4 transition-all duration-200 ${s.accent}`}
+                  >
+                    <div className="flex items-center justify-between gap-2 mb-2">
+                      <div className="flex size-8 items-center justify-center rounded-lg bg-[#101012] border border-transparent group-hover:border-white/10 text-[#fcfdff] transition-transform duration-200 group-hover:scale-105">
+                        <s.Icon className="size-4" />
+                      </div>
+                      <ExternalLinkIcon className="size-3.5 text-[#a1a4a5] opacity-0 transition-opacity group-hover:opacity-100" />
+                    </div>
+                    <div>
+                      <p className="font-mono text-xs font-bold text-[#fcfdff]">{s.name}</p>
+                      <p className="font-mono text-2xs text-[#a1a4a5] truncate">{s.label}</p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Column: Glassmorphic Inquiry Form */}
+            <div className="lg:col-span-7 rounded-2xl border border-transparent bg-[#08080c] p-5 sm:p-7 shadow-2xl relative overflow-hidden">
+              <h3 className="font-mono text-xs font-bold uppercase tracking-wider text-[#fcfdff] mb-1">
+                Send a Direct Message
+              </h3>
+              <p className="text-xs text-[#a1a4a5] mb-6">
+                Have a project or engineering role in mind? Drop your details below.
+              </p>
+
+              <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+                <FieldGroup className="gap-4">
+                  <Field data-invalid={!!errors.name}>
+                    <FieldLabel htmlFor="connect-name" className="text-xs font-mono text-[#fcfdff]">
+                      Your Name
+                    </FieldLabel>
+                    <InputGroup>
+                      <InputGroupInput
+                        id="connect-name"
+                        placeholder="e.g. Alex Morgan"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        aria-invalid={!!errors.name}
+                        className="text-xs rounded-xl bg-[#101014] border-white/14 text-[#fcfdff] focus:border-[#3b9eff] focus:ring-1 focus:ring-[#3b9eff]/50 transition-all py-2.5"
+                      />
+                    </InputGroup>
+                    {errors.name && <FieldError>{errors.name}</FieldError>}
+                  </Field>
+
+                  <Field data-invalid={!!errors.email}>
+                    <FieldLabel
+                      htmlFor="connect-email"
+                      className="text-xs font-mono text-[#fcfdff]"
+                    >
+                      Your Email
+                    </FieldLabel>
+                    <InputGroup>
+                      <InputGroupInput
+                        id="connect-email"
+                        type="email"
+                        placeholder="e.g. alex@company.com"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        aria-invalid={!!errors.email}
+                        className="text-xs rounded-xl bg-[#101014] border-white/14 text-[#fcfdff] focus:border-[#3b9eff] focus:ring-1 focus:ring-[#3b9eff]/50 transition-all py-2.5"
+                      />
+                    </InputGroup>
+                    {errors.email && <FieldError>{errors.email}</FieldError>}
+                  </Field>
+
+                  <Field data-invalid={!!errors.message}>
+                    <FieldLabel
+                      htmlFor="connect-message"
+                      className="text-xs font-mono text-[#fcfdff]"
+                    >
+                      Message
+                    </FieldLabel>
+                    <InputGroup>
+                      <InputGroupTextarea
+                        id="connect-message"
+                        rows={4}
+                        placeholder="How can Akshhat contribute to your engineering team?"
+                        value={formData.message}
+                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                        aria-invalid={!!errors.message}
+                        className="text-xs rounded-xl bg-[#101014] border-white/14 text-[#fcfdff] focus:border-[#3b9eff] focus:ring-1 focus:ring-[#3b9eff]/50 transition-all p-3"
+                      />
+                    </InputGroup>
+                    {errors.message && <FieldError>{errors.message}</FieldError>}
+                  </Field>
+                </FieldGroup>
+
+                <Button
+                  type="submit"
+                  size="default"
+                  variant="default"
+                  className="w-full sm:w-fit self-start gap-2 bg-[#fcfdff] text-[#000000] hover:bg-white/90 font-mono text-xs font-semibold py-2.5 px-6 rounded-xl transition-all"
+                >
+                  {sent ? (
+                    <CheckIcon className="size-4 text-[#000000]" />
+                  ) : (
+                    <SendIcon className="size-4 text-[#000000]" />
+                  )}
+                  <span>{sent ? "Opening Email Client..." : "Send Message"}</span>
+                </Button>
+              </form>
+            </div>
           </div>
-
-          <dl className="mt-10 grid gap-5 border-t border-border pt-8 sm:grid-cols-2">
-            <div className="flex items-start gap-3">
-              <Phone className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
-              <div>
-                <dt className="text-[0.65rem] font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-                  Phone
-                </dt>
-                <dd className="mt-0.5 text-[0.88rem] text-foreground">{profile.phone}</dd>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <MapPin className="mt-0.5 size-4 shrink-0 text-primary" aria-hidden />
-              <div>
-                <dt className="text-[0.65rem] font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-                  Location
-                </dt>
-                <dd className="mt-0.5 text-[0.88rem] text-foreground">{profile.location}</dd>
-              </div>
-            </div>
-          </dl>
-        </Reveal>
-
-        <div className="space-y-4">
-          {channels.map((c, i) => (
-            <Reveal key={c.label} delay={0.08 + i * 0.07}>
-              <a
-                href={c.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group glass flex items-center gap-4 rounded-3xl p-5 transition-all duration-500 hover:-translate-y-0.5 hover:border-primary/40"
-              >
-                <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-surface-strong text-primary">
-                  <c.Icon className="size-4" aria-hidden />
-                </span>
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[0.65rem] font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-                    {c.label}
-                  </span>
-                  <span className="mt-0.5 block truncate text-[0.88rem] text-foreground">
-                    {c.value}
-                  </span>
-                </span>
-                <ArrowUpRight
-                  className="size-4 shrink-0 text-muted-foreground transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-primary"
-                  aria-hidden
-                />
-              </a>
-            </Reveal>
-          ))}
         </div>
       </div>
-    </Section>
+    </section>
   );
 });

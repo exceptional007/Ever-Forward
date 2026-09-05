@@ -1,59 +1,66 @@
 import { memo, type ReactNode } from "react";
-import { Reveal } from "@/components/animations/Reveal";
+import { cn } from "@/lib/utils";
+
+/** Translucent hairline section divider */
+export function HatchRule({ className }: { className?: string }) {
+  return <div aria-hidden className={cn("h-px w-full shrink-0 bg-white/06", className)} />;
+}
+
+/** Section heading sitting on full-width hairline */
+export function SectionHeading({
+  children,
+  id,
+  as: Tag = "h2",
+  className,
+  action,
+}: {
+  children: ReactNode;
+  id?: string;
+  as?: "h1" | "h2" | "h3";
+  className?: string;
+  action?: ReactNode;
+}) {
+  return (
+    <div
+      className={cn(
+        "relative flex w-full items-center justify-between gap-4 border-b border-white/06 px-4 py-4 sm:px-6",
+        className,
+      )}
+    >
+      <Tag
+        id={id}
+        className="scroll-mt-24 text-2xl font-semibold tracking-tighter text-[#fcfdff] sm:text-3xl"
+      >
+        {children}
+      </Tag>
+      {action ? <div className="shrink-0">{action}</div> : null}
+    </div>
+  );
+}
 
 type SectionProps = {
   id: string;
-  index: string;
-  eyebrow: string;
+  eyebrow?: string;
   title: ReactNode;
   description?: string;
   children: ReactNode;
   className?: string;
 };
 
-/** Consistent section frame: index, eyebrow, gradient title, hairline divider. */
 export const Section = memo(function Section({
   id,
-  index,
-  eyebrow,
   title,
   description,
   children,
   className,
 }: SectionProps) {
   return (
-    <section
-      id={id}
-      aria-labelledby={`${id}-heading`}
-      className={`relative mx-auto w-full max-w-6xl scroll-mt-28 px-5 py-24 sm:px-8 sm:py-32 ${className ?? ""}`}
-    >
-      <Reveal className="hairline mb-14" y={0} blur={false} />
-
-      <Reveal className="mb-3 flex items-center gap-3">
-        <span className="font-mono text-[0.7rem] tracking-[0.25em] text-primary">{index}</span>
-        <span className="text-[0.7rem] font-semibold tracking-[0.25em] text-muted-foreground uppercase">
-          {eyebrow}
-        </span>
-      </Reveal>
-
-      <Reveal delay={0.06}>
-        <h2
-          id={`${id}-heading`}
-          className="max-w-3xl text-3xl leading-[1.08] font-semibold sm:text-4xl md:text-5xl"
-        >
-          {title}
-        </h2>
-      </Reveal>
-
+    <section id={id} aria-labelledby={`${id}-heading`} className={cn("w-full py-8", className)}>
+      <SectionHeading id={`${id}-heading`}>{title}</SectionHeading>
       {description && (
-        <Reveal delay={0.12}>
-          <p className="mt-5 max-w-2xl text-[0.98rem] leading-relaxed text-muted-foreground sm:text-base">
-            {description}
-          </p>
-        </Reveal>
+        <p className="px-4 sm:px-6 pt-3 text-xs leading-relaxed text-[#a1a4a5]">{description}</p>
       )}
-
-      <div className="mt-14">{children}</div>
+      <div className="w-full">{children}</div>
     </section>
   );
 });

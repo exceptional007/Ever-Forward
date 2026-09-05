@@ -8,11 +8,11 @@ export const profile = {
   role: "Software Engineer · AI Engineer",
   tagline: "I build AI-integrated production systems, end to end.",
   summary:
-    "Full-stack engineer shipping AI-integrated production systems across React/TypeScript, .NET Web API and FastAPI. I own features end to end — layered backend architecture, REST API design, RAG pipelines, vector search and CI-ready test automation.",
+    "Full-stack engineer shipping AI-integrated production systems across React/TypeScript, .NET Web API and FastAPI. I own features end to end: layered backend architecture, REST API design, RAG pipelines, vector search and CI-ready test automation.",
   longSummary:
     "I'm a final-year CSE (Data Science) student at Buddha Institute of Technology, Gorakhpur, currently working as an AI Engineer Intern at String AI India. My work sits where product engineering meets applied AI: multilingual NLP pipelines, retrieval-augmented investigation tooling, and layered .NET/FastAPI services that hold up in production.",
   focus:
-    "Right now I'm deep in retrieval systems — embeddings, vector stores and evaluation — while keeping strong CS fundamentals sharp through daily DSA practice.",
+    "Right now I'm deep in retrieval systems (embeddings, vector stores and evaluation) while keeping strong CS fundamentals sharp through daily DSA practice.",
   availability: "Open to SWE internship & new-grad roles",
   location: "Gorakhpur, Uttar Pradesh, India",
   email: "akshhatsri7843@gmail.com",
@@ -35,27 +35,27 @@ export const stats = [
 export const timeline = [
   {
     year: "2026",
-    title: "AI Engineer Intern — String AI India",
+    title: "AI Engineer Intern at String AI India",
     meta: "Apr 2026 – Jul 2026 · Remote",
     body: "Multilingual safety pipelines, an AI fraud investigation portal, and a layered React + ASP.NET Core platform.",
   },
   {
     year: "2026",
-    title: "Software Developer Intern — String AI India",
+    title: "Software Developer Intern at String AI India",
     meta: "Jan 2026 – Apr 2026 · Remote",
     body: "RAG document assistant on Qdrant Cloud, Celery/Redis job offloading, Docker + Azure deployments.",
   },
   {
     year: "2023",
-    title: "B.Tech CSE (Data Science) — Buddha Institute of Technology",
+    title: "B.Tech CSE (Data Science) at Buddha Institute of Technology",
     meta: "2023 – Present · Gorakhpur, India",
     body: "82.27% through the 6th semester. IEEE Student Branch member and active hackathon competitor.",
   },
   {
     year: "2022",
-    title: "Intermediate (PCM), CBSE — Divine Public School",
+    title: "Intermediate (PCM), CBSE at Divine Public School",
     meta: "2022 – 2023 · 89.5%",
-    body: "Physics, Chemistry and Mathematics — where the programming habit started.",
+    body: "Physics, Chemistry and Mathematics: where the programming habit started.",
   },
 ] as const;
 
@@ -173,6 +173,7 @@ export type Experience = {
   summary: string;
   highlights: string[];
   stack: string[];
+  logo: string;
 };
 
 export const experiences: Experience[] = [
@@ -182,17 +183,28 @@ export const experiences: Experience[] = [
     period: "Apr 2026 – Jul 2026",
     location: "Remote",
     type: "Internship",
+    logo: "/stringaiindialogo.png",
     summary:
       "Owned multilingual AI safety tooling and two full-stack AI products from architecture through release.",
     highlights: [
-      "Architected a Unicode-aware multilingual text processing pipeline for 22 Indian languages — normalization, script-specific tokenization, Indic digit conversion and pattern matching — improving AI safety classification accuracy.",
+      "Architected a Unicode-aware multilingual text processing pipeline for 22 Indian languages (normalization, script-specific tokenization, Indic digit conversion and pattern matching), improving AI safety classification accuracy.",
       "Extended NLP preprocessing across multiple Indic scripts and language-specific lexical patterns, increasing detection coverage for multilingual user-generated content.",
       "Architected an AI-powered Fraud Detection & Investigation Portal covering OCR document intake, entity extraction, RAG investigation chat, audit logging and role-based access for admin, investigator and auditor roles.",
       "Designed a Patient & Farmer Management System on a layered architecture with the Repository pattern and EF Core (Code-First); shipped AI medical summaries and crop advisory via the OpenAI API.",
       "Built a Playwright API test suite over auth and CRUD flows, catching regressions before release.",
       "Built a reusable React component library adopted across internal projects, cutting duplicate UI work.",
     ],
-    stack: ["FastAPI", "Streamlit", "PostgreSQL", "Qdrant", "OpenAI", "React", "ASP.NET Core", "JWT", "Playwright"],
+    stack: [
+      "FastAPI",
+      "Streamlit",
+      "PostgreSQL",
+      "Qdrant",
+      "OpenAI",
+      "React",
+      "ASP.NET Core",
+      "JWT",
+      "Playwright",
+    ],
   },
   {
     role: "Software Developer Intern",
@@ -200,6 +212,7 @@ export const experiences: Experience[] = [
     period: "Jan 2026 – Apr 2026",
     location: "Remote",
     type: "Internship",
+    logo: "/stringaiindialogo.png",
     summary: "Built retrieval infrastructure and standardized deployments across environments.",
     highlights: [
       "Built a Retrieval-Augmented Generation document assistant with embeddings in Qdrant Cloud and metadata in PostgreSQL.",
@@ -210,11 +223,12 @@ export const experiences: Experience[] = [
     stack: ["Python", "OpenAI", "Qdrant Cloud", "PostgreSQL", "Celery", "Redis", "Docker", "Azure"],
   },
   {
-    role: "Python Full Stack Developer — Training Internship",
+    role: "Python Full Stack Developer (Training Internship)",
     company: "10-week program",
     period: "Jan 2026 – Mar 2026",
     location: "Remote",
     type: "Training",
+    logo: "/eduskills-logo.png",
     summary: "End-to-end web application development across the Python stack.",
     highlights: [
       "Hands-on delivery across HTML, CSS, Bootstrap, JavaScript, jQuery, Python, Django, SQL and Git.",
@@ -228,6 +242,7 @@ export const experiences: Experience[] = [
     period: "Jan 2025 – Dec 2025",
     location: "Gorakhpur, India",
     type: "Leadership",
+    logo: "/ieee-logo.webp",
     summary: "Technology-driven events, collaborative projects and innovation initiatives.",
     highlights: [
       "Contributed to organizing technical events and the ICICAT-2025 conference effort.",
@@ -250,16 +265,75 @@ export type Project = {
   tags: string[];
   featured: boolean;
   image?: string;
-  links: { github?: string; live?: string };
+  links: { github?: string; live?: string; demo?: string };
 };
 
 export const projects: Project[] = [
   {
+    slug: "vardha-voice",
+    title: "Vardha AI Voice Calling Agent",
+    period: "2026",
+    tagline: "Autonomous outbound AI voice agent grounded in custom Knowledge Bases.",
+    role: "Full-stack & AI Engineer (System Architecture, Real-Time Audio Streaming)",
+    description:
+      "Autonomous outbound voice calling platform that conducts real-time, Knowledge Base–grounded spoken dialogues over Twilio Voice, records calls, and automatically generates chat transcripts and AI summaries.",
+    features: [
+      "Bi-directional WebSocket media streaming via Twilio Voice, Deepgram STT, Gemini 1.5 Flash & OpenAI TTS",
+      "Knowledge Base CRUD repository & searchable context selection for outbound calls",
+      "WhatsApp-style waveform audio player with 36 interactive amplitude bars & speed controls",
+      "Real-time call tracking dashboard, iMessage-style speaker chat transcripts & AI executive summaries",
+    ],
+    challenge:
+      "Achieving sub-second voice round-trip latency while processing bi-directional audio streams, real-time transcription, and RAG Knowledge Base retrieval without audio buffering artifacts.",
+    stack: ["React", "TypeScript", "FastAPI", "Twilio", "Deepgram", "OpenAI", "PostgreSQL"],
+    tags: ["AI/ML", "Full-stack"],
+    featured: true,
+    links: {
+      github: "https://github.com/exceptional007/Vardha-Links-Voice-Calling-Agent.git",
+      live: "https://vardha-links-voice-calling-agent.vercel.app",
+      demo: "https://youtu.be/yVIfLpLRI9Q",
+    },
+    image: "/vardha-voice.png",
+  },
+  {
+    slug: "autopay",
+    title: "AutoPay: Daily Auto Expense Tracker",
+    period: "2026",
+    tagline: "Commute expense tracker with budget analytics & Google GenAI insights.",
+    role: "Lead Full-stack Developer (React, Firebase, GenAI SDK, Tailwind CSS)",
+    description:
+      "A robust, responsive web application engineered to track daily auto commute expenses, featuring budget tracking, automated PDF export reports, interactive expense analytics, and Google GenAI insights.",
+    features: [
+      "Firebase Auth & Firestore database real-time cloud synchronization",
+      "Monthly budget configuration, spending thresholds & real-time expense analytics",
+      "One-click automated PDF export generation via jsPDF & jsPDF-AutoTable",
+      "AI-assisted spending analysis and optimization using Google GenAI SDK",
+    ],
+    challenge:
+      "Implementing real-time cloud sync and atomic expense aggregations in Firestore while supporting offline fallback and instant client-side date-range filtering.",
+    stack: [
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Firebase",
+      "Firestore",
+      "Google GenAI",
+      "jsPDF",
+    ],
+    tags: ["Full-stack", "AI/ML"],
+    featured: true,
+    links: {
+      github: "https://github.com/exceptional007/autopay.git",
+      live: "https://autopay-37278.web.app/",
+    },
+    image: "/autopay.png",
+  },
+  {
     slug: "inca",
-    title: "INCA — Intelligent Campus Assistant",
+    title: "INCA: Intelligent Campus Assistant",
     period: "Jul 2026 – Present",
     tagline: "An AI operating layer for an entire campus.",
-    role: "Lead developer — architecture, AI modules, frontend",
+    role: "Lead developer (architecture, AI modules, frontend)",
     description:
       "AI-powered campus management platform unifying attendance, notices, AI tutoring, lost & found and analytics into a single web application. Runner-up at Tech-Yuva 10.0.",
     features: [
@@ -269,11 +343,14 @@ export const projects: Project[] = [
       "Notice distribution and campus analytics dashboards",
     ],
     challenge:
-      "Keeping several AI subsystems inside one coherent product surface without letting latency or cost blow up — solved with cached embeddings and task-specific model routing.",
+      "Keeping several AI subsystems inside one coherent product surface without letting latency or cost blow up: solved with cached embeddings and task-specific model routing.",
     stack: ["React", "FastAPI", "PostgreSQL", "OpenAI", "Vector search"],
     tags: ["AI/ML", "Full-stack"],
     featured: true,
-    links: { github: "https://github.com/exceptional007/inca-intelligent-campus-assistant.git", live: "https://incaweb.netlify.app/" },
+    links: {
+      github: "https://github.com/exceptional007/inca-intelligent-campus-assistant.git",
+      live: "https://incaweb.netlify.app/",
+    },
     image: "/inca.png",
   },
   {
@@ -313,7 +390,7 @@ export const projects: Project[] = [
       "Crop advisory recommendations for farmer profiles",
     ],
     challenge:
-      "Two very different domains shared one platform — resolved with a strict service boundary per domain over a common persistence layer.",
+      "Two very different domains shared one platform: resolved with a strict service boundary per domain over a common persistence layer.",
     stack: ["React", "ASP.NET Core", "EF Core", "PostgreSQL", "JWT", "OpenAI"],
     tags: ["Full-stack", "Backend"],
     featured: true,
@@ -339,7 +416,10 @@ export const projects: Project[] = [
     stack: ["Node.js", "Express", "MongoDB", "Cloudinary", "Mailtrap"],
     tags: ["Backend"],
     featured: false,
-    links: { github: "https://github.com/exceptional007/Project-Camp-Backend.git", live: "https://www.youtube.com/watch?v=vRuK1ZM_fWI&feature=youtu.be" },
+    links: {
+      github: "https://github.com/exceptional007/Project-Camp-Backend.git",
+      live: "https://www.youtube.com/watch?v=vRuK1ZM_fWI&feature=youtu.be",
+    },
     image: "/projectmanagement.jpg",
   },
   {
@@ -360,7 +440,10 @@ export const projects: Project[] = [
     stack: ["Python", "NLP", "Render", "Vercel"],
     tags: ["AI/ML", "Backend"],
     featured: false,
-    links: { github: "https://github.com/exceptional007/TalentTagger.git", live: "https://talent-tagger.netlify.app/" },
+    links: {
+      github: "https://github.com/exceptional007/TalentTagger.git",
+      live: "https://talent-tagger.netlify.app/",
+    },
     image: "/talenttagger.png",
   },
   {
@@ -378,7 +461,7 @@ export const projects: Project[] = [
       "PostgreSQL on Render with a Vercel frontend",
     ],
     challenge:
-      "Delivering relevant results with no geo service — pincode adjacency tables gave locality without a maps dependency.",
+      "Delivering relevant results with no geo service: pincode adjacency tables gave locality without a maps dependency.",
     stack: ["Django", "PostgreSQL", "AWS S3", "HTML/CSS"],
     tags: ["Full-stack"],
     featured: false,
@@ -401,7 +484,7 @@ export type Certification = {
 
 export const certifications: Certification[] = [
   {
-    title: "Fundamentals of OOPs — Elite Certificate",
+    title: "Fundamentals of OOPs: Elite Certificate",
     issuer: "NPTEL · IIT Roorkee",
     period: "Jan 2025 – Apr 2025",
     detail: "Elite certification with a score of 82%.",
@@ -439,10 +522,10 @@ export const achievements: Achievement[] = [
     award: "Runner Up",
     period: "Oct 2025",
     detail:
-      "Built INCA, an AI-powered campus app — engineered smart attendance, the AI chatbot and AI-vision Lost & Found. Buddha Institute of Technology, Gorakhpur.",
+      "Built INCA, an AI-powered campus app: engineered smart attendance, the AI chatbot and AI-vision Lost & Found. Buddha Institute of Technology, Gorakhpur.",
   },
   {
-    title: "Turbo AI Challenge — AKTU Tech Fest (Zonal)",
+    title: "Turbo AI Challenge: AKTU Tech Fest (Zonal)",
     award: "Runner Up",
     period: "Nov 2024",
     detail: "2nd position for an image-based Plant Disease Recognition AI model.",
@@ -471,7 +554,7 @@ export const testimonials = [
   },
   {
     quote:
-      "He shipped the fraud investigation portal with audit logging and role separation done properly the first time — rare for an intern.",
+      "He shipped the fraud investigation portal with audit logging and role separation done properly the first time, rare for an intern.",
     name: "Product Lead",
     role: "String AI India",
   },
@@ -483,6 +566,34 @@ export const testimonials = [
   },
 ];
 
+export type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+export const faqItems: FaqItem[] = [
+  {
+    question: "What engineering roles are you currently looking for?",
+    answer:
+      "I am actively seeking Software Engineer (SWE) and AI Engineer full-time / internship opportunities. I specialize in backend API development (.NET Core, FastAPI), AI integration (RAG, vector search, multilingual NLP), and full-stack React applications.",
+  },
+  {
+    question: "What is your primary tech stack?",
+    answer:
+      "My primary backend stack consists of Python (FastAPI, Django) and C# (.NET Core Web API, EF Core). On the frontend, I work heavily with React.js, TypeScript, and Tailwind CSS. For AI/RAG data engineering, I rely on Qdrant, PostgreSQL, Celery/Redis, and OpenAI APIs.",
+  },
+  {
+    question: "What was your biggest impact at String AI India?",
+    answer:
+      "I architected a Unicode-aware multilingual NLP processing pipeline covering 22 Indian languages to improve AI safety classification. I also built an AI-powered Fraud Detection & Investigation Portal featuring OCR document intake, RAG investigation chat, and immutable audit logs.",
+  },
+  {
+    question: "Are you open to relocation or remote work?",
+    answer:
+      "Yes, I am fully available for remote roles as well as relocation across tech hubs in India (Bangalore, NCR, Hyderabad, Pune, etc.) or internationally.",
+  },
+];
+
 export const navSections = [
   { id: "hero", label: "Home" },
   { id: "about", label: "About" },
@@ -490,6 +601,7 @@ export const navSections = [
   { id: "experience", label: "Experience" },
   { id: "projects", label: "Projects" },
   { id: "achievements", label: "Achievements" },
-  { id: "resume", label: "Resume" },
+  { id: "cv", label: "CV" },
+  { id: "faq", label: "FAQ" },
   { id: "contact", label: "Contact" },
 ] as const;

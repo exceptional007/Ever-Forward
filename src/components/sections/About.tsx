@@ -1,93 +1,102 @@
 import { memo } from "react";
-import { motion } from "motion/react";
-import { GraduationCap, Sparkles, Target } from "lucide-react";
-import { profile, stats, timeline } from "@/data/portfolio";
-import { Section } from "@/components/layout/Section";
-import { Reveal } from "@/components/animations/Reveal";
-import { Counter } from "@/components/animations/Counter";
-import { viewportOnce } from "@/lib/motion";
+import { BrainIcon, GraduationCapIcon, LayersIcon } from "lucide-react";
+import { SectionHeading } from "@/components/layout/Section";
+import { SectionBackground } from "@/components/layout/SectionBackground";
+import { Badge } from "@/components/ui/badge";
 
-const pillars = [
-  { Icon: GraduationCap, label: "Education", body: profile.education },
-  { Icon: Sparkles, label: "Current focus", body: profile.focus },
-  { Icon: Target, label: "Looking for", body: profile.availability },
+const aboutCards = [
+  {
+    title: "AI Engineer Intern @ String AI India",
+    subtitle: "Production AI & Multilingual Tooling",
+    description:
+      "Architectural owner of Unicode-aware multilingual NLP processing pipelines supporting 22 Indian languages. Built RAG document investigation portals and layered .NET Core & FastAPI microservices.",
+    tags: ["22 Indic Languages", "RAG Pipelines", ".NET & FastAPI"],
+    icon: BrainIcon,
+    accent: "hover:border-[#3b9eff]/40 bg-[#3b9eff]/05",
+    iconColor: "text-[#3b9eff] bg-[#3b9eff]/10 border-transparent group-hover:border-[#3b9eff]/30",
+  },
+  {
+    title: "CSE (Data Science) @ Buddha Institute of Tech",
+    subtitle: "Academic Excellence & Hackathons",
+    description:
+      "Maintaining an 82.27% aggregate score through 6 semesters. 3 Hackathon podium finishes including Runner-Up at Tech-Yuva 10.0 for INCA (Intelligent Campus Assistant).",
+    tags: ["82.27% Academic Avg", "Tech-Yuva 10.0 Runner-Up", "IEEE Member"],
+    icon: GraduationCapIcon,
+    accent: "hover:border-[#3b9eff]/40 bg-[#3b9eff]/05",
+    iconColor: "text-[#3b9eff] bg-[#3b9eff]/10 border-transparent group-hover:border-[#3b9eff]/30",
+  },
+  {
+    title: "Applied AI & Scalable Infrastructure",
+    subtitle: "Core Stack & Engineering Focus",
+    description:
+      "Specialized in vector stores (Qdrant Cloud, ChromaDB), OpenAI API integrations, EF Core Code-First Repository pattern, and CI-ready API test automation with Playwright.",
+    tags: ["Qdrant & ChromaDB", "OpenAI API", "Playwright QA"],
+    icon: LayersIcon,
+    accent: "hover:border-[#11ff99]/40 bg-[#11ff99]/05",
+    iconColor: "text-[#11ff99] bg-[#11ff99]/10 border-transparent group-hover:border-[#11ff99]/30",
+  },
 ];
 
 export const About = memo(function About() {
   return (
-    <Section
+    <section
+      aria-labelledby="about-heading"
       id="about"
-      index="01"
-      eyebrow="About"
-      title={
-        <>
-          Engineering that survives{" "}
-          <span className="bg-clip-text text-transparent accent-gradient">production</span>.
-        </>
-      }
-      description={profile.longSummary}
+      className="relative overflow-hidden w-full py-6"
     >
-      <div className="grid gap-14 lg:grid-cols-[1.05fr_1fr]">
-        <div>
-          <ul className="grid gap-4 sm:grid-cols-2">
-            {pillars.map(({ Icon, label, body }, i) => (
-              <Reveal as="li" key={label} delay={i * 0.08} className="glass rounded-3xl p-5">
-                <Icon className="mb-4 size-5 text-primary" aria-hidden />
-                <p className="text-[0.68rem] font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-                  {label}
-                </p>
-                <p className="mt-2 text-sm leading-relaxed text-foreground">{body}</p>
-              </Reveal>
-            ))}
-            <Reveal as="li" delay={0.24} className="glass rounded-3xl p-5">
-              <p className="text-[0.68rem] font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-                Based in
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-foreground">{profile.location}</p>
-              <p className="mt-4 font-mono text-[0.7rem] text-primary">{profile.email}</p>
-            </Reveal>
-          </ul>
+      <SectionBackground variant="about" />
+      <div className="relative z-10">
+        <SectionHeading id="about-heading">About</SectionHeading>
 
-          <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {stats.map((s, i) => (
-              <Reveal key={s.label} delay={i * 0.07} className="rounded-2xl border border-border p-4">
-                <dd className="text-2xl font-semibold tracking-tight text-foreground">
-                  <Counter value={s.value} suffix={s.suffix} />
-                </dd>
-                <dt className="mt-1 text-[0.7rem] leading-snug text-muted-foreground">{s.label}</dt>
-              </Reveal>
-            ))}
-          </dl>
-        </div>
+        <div className="px-4 py-6 sm:px-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5">
+            {aboutCards.map((card) => {
+              const IconComp = card.icon;
+              return (
+                <div
+                  key={card.title}
+                  className={`group relative flex flex-col justify-between rounded-xl border border-transparent bg-[#08080c] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#0c0c10] ${card.accent}`}
+                >
+                  <div>
+                    {/* Header Icon + Title */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <div
+                        className={`flex size-9 shrink-0 items-center justify-center rounded-lg border font-bold transition-all duration-200 group-hover:scale-105 ${card.iconColor}`}
+                      >
+                        <IconComp className="size-4.5" />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="font-mono text-xs font-bold text-[#fcfdff] leading-tight truncate">
+                          {card.title}
+                        </h3>
+                        <p className="font-mono text-2xs text-[#a1a4a5] mt-0.5">{card.subtitle}</p>
+                      </div>
+                    </div>
 
-        <div className="relative">
-          <Reveal className="mb-8 text-[0.68rem] font-semibold tracking-[0.24em] text-muted-foreground uppercase">
-            The journey
-          </Reveal>
-          <ol className="relative space-y-9 border-l border-border pl-7">
-            <motion.span
-              className="absolute top-0 -left-px w-px origin-top accent-gradient"
-              initial={{ scaleY: 0, height: "100%" }}
-              whileInView={{ scaleY: 1 }}
-              viewport={viewportOnce}
-              transition={{ duration: 1.3, ease: [0.22, 1, 0.36, 1] }}
-              aria-hidden
-            />
-            {timeline.map((item, i) => (
-              <Reveal as="li" key={item.title} delay={i * 0.1} className="relative">
-                <span
-                  aria-hidden
-                  className="absolute top-1.5 -left-[2.05rem] size-2.5 rounded-full border border-primary bg-background"
-                />
-                <p className="font-mono text-[0.7rem] tracking-widest text-primary">{item.year}</p>
-                <h3 className="mt-1.5 text-base font-semibold text-foreground">{item.title}</h3>
-                <p className="mt-1 text-[0.72rem] text-muted-foreground">{item.meta}</p>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
-              </Reveal>
-            ))}
-          </ol>
+                    {/* Description Text */}
+                    <p className="text-xs text-[#a1a4a5] leading-relaxed mb-4">
+                      {card.description}
+                    </p>
+                  </div>
+
+                  {/* Highlight Badges */}
+                  <div className="flex flex-wrap gap-1.5 pt-2 border-t border-transparent group-hover:border-white/06 transition-colors">
+                    {card.tags.map((t) => (
+                      <Badge
+                        key={t}
+                        variant="default"
+                        className="font-mono text-2xs py-0.5 px-2 bg-[#101014] border border-transparent group-hover:border-white/10 text-[#fcfdff] transition-colors"
+                      >
+                        {t}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </Section>
+    </section>
   );
 });

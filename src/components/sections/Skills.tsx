@@ -1,110 +1,86 @@
 import { memo } from "react";
-import { motion } from "motion/react";
 import {
-  Brain,
-  Cloud,
-  Code2,
-  Database,
-  MonitorSmartphone,
-  Server,
-  Wrench,
+  BrainIcon,
+  CloudIcon,
+  Code2Icon,
+  DatabaseIcon,
+  MonitorSmartphoneIcon,
+  ServerIcon,
+  WrenchIcon,
   type LucideIcon,
 } from "lucide-react";
-import { skillGroups, techCloud } from "@/data/portfolio";
-import { Section } from "@/components/layout/Section";
-import { Reveal } from "@/components/animations/Reveal";
-import { ease, viewportOnce } from "@/lib/motion";
+import { skillGroups } from "@/data/portfolio";
+import { SectionHeading } from "@/components/layout/Section";
+import { SectionBackground } from "@/components/layout/SectionBackground";
+import { SkillIcon } from "@/components/common/SkillIcon";
 
-const icons: Record<string, LucideIcon> = {
-  Code2,
-  MonitorSmartphone,
-  Server,
-  Database,
-  Brain,
-  Cloud,
-  Wrench,
+const iconMap: Record<string, LucideIcon> = {
+  Code2: Code2Icon,
+  MonitorSmartphone: MonitorSmartphoneIcon,
+  Server: ServerIcon,
+  Database: DatabaseIcon,
+  Brain: BrainIcon,
+  Cloud: CloudIcon,
+  Wrench: WrenchIcon,
 };
 
 export const Skills = memo(function Skills() {
   return (
-    <Section
+    <section
+      aria-labelledby="skills-heading"
       id="skills"
-      index="02"
-      eyebrow="Capabilities"
-      title={
-        <>
-          A stack chosen for{" "}
-          <span className="bg-clip-text text-transparent accent-gradient">depth</span>, not breadth.
-        </>
-      }
-      description="Languages, frameworks and infrastructure I've actually shipped with — grouped by where they sit in the system."
+      className="relative overflow-hidden w-full py-6"
     >
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {skillGroups.map((group, gi) => {
-          const Icon = icons[group.icon] ?? Code2;
-          return (
-            <Reveal
-              key={group.category}
-              delay={gi * 0.06}
-              className="group glass relative overflow-hidden rounded-3xl p-6 transition-all duration-500 hover:-translate-y-1 hover:border-primary/40 hover:shadow-glow"
-            >
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -top-16 -right-16 size-40 rounded-full bg-primary/10 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100"
-              />
-              <div className="mb-5 flex items-center gap-3">
-                <span className="grid size-9 place-items-center rounded-xl bg-surface-strong text-primary">
-                  <Icon className="size-4" aria-hidden />
-                </span>
-                <h3 className="text-sm font-semibold tracking-tight text-foreground">
-                  {group.category}
-                </h3>
-              </div>
+      <SectionBackground variant="skills" />
+      <div className="relative z-10">
+        <SectionHeading id="skills-heading">Skills & Technologies</SectionHeading>
 
-              <ul className="space-y-3.5">
-                {group.items.map((item, i) => (
-                  <li key={item.name}>
-                    <div className="mb-1.5 flex items-baseline justify-between gap-3">
-                      <span className="text-[0.82rem] text-foreground">{item.name}</span>
-                      <span className="font-mono text-[0.65rem] text-muted-foreground">
-                        {item.level}
+        <div className="px-4 py-6 sm:px-6">
+          {/* Perfectly Balanced 2-Column Bento Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+            {skillGroups.map((group) => {
+              const IconComponent = iconMap[group.icon] ?? Code2Icon;
+              const isAiGroup = group.category === "AI / ML";
+
+              return (
+                <div
+                  key={group.category}
+                  className={`group relative flex flex-col justify-between rounded-xl border border-transparent bg-[#08080c] p-4.5 sm:p-5 transition-all duration-300 hover:border-white/25 hover:bg-[#0c0c10] ${
+                    isAiGroup
+                      ? "md:col-span-2 hover:border-purple-500/40 bg-gradient-to-r from-[#0f0918] via-[#08080c] to-[#08080c]"
+                      : ""
+                  }`}
+                >
+                  {/* Category Header Bar */}
+                  <div className="flex items-center justify-between gap-3 mb-3.5 pb-3 border-b border-transparent group-hover:border-white/10 transition-colors duration-300">
+                    <div className="flex items-center gap-2.5">
+                      <div className="flex size-7.5 items-center justify-center rounded-lg bg-[#121216] border border-transparent group-hover:border-white/20 text-[#3b9eff] transition-all duration-200 group-hover:scale-105">
+                        <IconComponent className="size-4" />
+                      </div>
+                      <span className="font-mono text-xs font-bold uppercase tracking-wider text-[#fcfdff]">
+                        {group.category}
                       </span>
                     </div>
-                    <div
-                      className="h-[3px] overflow-hidden rounded-full bg-surface-strong"
-                      role="presentation"
-                    >
-                      <motion.div
-                        className="h-full origin-left rounded-full accent-gradient"
-                        initial={{ scaleX: 0 }}
-                        whileInView={{ scaleX: item.level / 100 }}
-                        viewport={viewportOnce}
-                        transition={{ duration: 1, delay: 0.1 + i * 0.06, ease }}
-                        style={{ willChange: "transform" }}
-                      />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </Reveal>
-          );
-        })}
-      </div>
+                  </div>
 
-      <Reveal delay={0.15} className="mt-12 flex flex-wrap justify-center gap-2.5">
-        {techCloud.map((tech, i) => (
-          <motion.span
-            key={tech}
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={viewportOnce}
-            transition={{ duration: 0.45, delay: i * 0.025, ease }}
-            className="glass rounded-full px-4 py-2 text-[0.78rem] text-muted-foreground transition-colors duration-300 hover:border-primary/50 hover:text-primary"
-          >
-            {tech}
-          </motion.span>
-        ))}
-      </Reveal>
-    </Section>
+                  {/* Icon Cluster Grid */}
+                  <div className="flex flex-wrap gap-3 sm:gap-3.5 items-center pt-0.5">
+                    {group.items.map((skill) => (
+                      <SkillIcon
+                        key={skill.name}
+                        name={skill.name}
+                        category={group.category}
+                        showLabel={false}
+                        size="md"
+                      />
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 });

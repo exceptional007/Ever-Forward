@@ -57,38 +57,46 @@ export const CommandPalette = memo(function CommandPalette({ open, onOpenChange 
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
       <CommandInput placeholder="Jump to a section or run an action…" />
-        <CommandList>
-          <CommandEmpty>No results.</CommandEmpty>
-          <CommandGroup heading="Navigate">
-            {navSections.map((s) => (
-              <CommandItem
-                key={s.id}
-                value={`go ${s.label}`}
-                onSelect={() => {
-                  onOpenChange(false);
-                  document.getElementById(s.id)?.scrollIntoView({ behavior: "smooth" });
-                }}
-              >
-                <Compass className="size-4" aria-hidden />
-                {s.label}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-          <CommandGroup heading="Actions">
-            {actions.map((a) => (
-              <CommandItem
-                key={a.label}
-                value={a.label}
-                onSelect={() => {
-                  onOpenChange(false);
-                  a.run();
-                }}
-              >
-                <a.icon className="size-4" aria-hidden />
-                {a.label}
-              </CommandItem>
-            ))}
-          </CommandGroup>
+      <CommandList>
+        <CommandEmpty>No results.</CommandEmpty>
+        <CommandGroup heading="Navigate">
+          {navSections.map((s) => (
+            <CommandItem
+              key={s.id}
+              value={`go ${s.label}`}
+              onSelect={() => {
+                onOpenChange(false);
+                if (s.id === "cv") {
+                  window.location.hash = "#cv";
+                } else {
+                  if (window.location.hash === "#cv") {
+                    window.location.hash = s.id === "hero" ? "" : `#${s.id}`;
+                  } else {
+                    document.getElementById(s.id)?.scrollIntoView({ behavior: "smooth" });
+                  }
+                }
+              }}
+            >
+              <Compass className="size-4" aria-hidden />
+              {s.label}
+            </CommandItem>
+          ))}
+        </CommandGroup>
+        <CommandGroup heading="Actions">
+          {actions.map((a) => (
+            <CommandItem
+              key={a.label}
+              value={a.label}
+              onSelect={() => {
+                onOpenChange(false);
+                a.run();
+              }}
+            >
+              <a.icon className="size-4" aria-hidden />
+              {a.label}
+            </CommandItem>
+          ))}
+        </CommandGroup>
       </CommandList>
     </CommandDialog>
   );

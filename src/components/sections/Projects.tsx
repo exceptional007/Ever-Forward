@@ -1,244 +1,283 @@
-import { memo, useCallback, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
-import { ArrowUpRight, ExternalLink, Github, Search, Star } from "lucide-react";
+import { memo, useMemo, useState } from "react";
+import {
+  ExternalLinkIcon,
+  GithubIcon,
+  ArrowUpRightIcon,
+  CheckCircle2Icon,
+  VideoIcon,
+} from "lucide-react";
 import { projectFilters, projects, type Project } from "@/data/portfolio";
-import { Section } from "@/components/layout/Section";
-import { Reveal } from "@/components/animations/Reveal";
-import { Tilt } from "@/components/animations/Tilt";
-import { ease, springSnappy } from "@/lib/motion";
+import { SectionHeading } from "@/components/layout/Section";
+import { SectionBackground } from "@/components/layout/SectionBackground";
+import { SkillIcon } from "@/components/common/SkillIcon";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
-const ProjectCard = memo(function ProjectCard({ project }: { project: Project }) {
-  const [expanded, setExpanded] = useState(false);
-  const toggle = useCallback(() => setExpanded((e) => !e), []);
+function ProjectCard({ project }: { project: Project }) {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const primaryHref = project.links.live ?? project.links.github ?? "#";
 
   return (
-    <Tilt className="h-full" max={4}>
-      <article
-        className={`group glass relative flex h-full flex-col overflow-hidden rounded-[1.75rem] transition-all duration-500 hover:border-primary/40 hover:shadow-glow ${project.featured ? "" : ""}`}
-      >
-        <div
-          aria-hidden
-          className="relative h-40 overflow-hidden border-b border-border bg-surface-strong"
+    <div className="group/card relative flex flex-1 flex-col gap-3 p-4 sm:p-5">
+      {/* Resend Code Window Shell */}
+      <div className="relative overflow-hidden rounded-lg border border-transparent bg-[#06060a] transition-all duration-300 group-hover/card:border-white/30">
+        {/* Code Window Header Bar with Traffic Light Dots */}
+        <div className="flex items-center justify-between border-b border-transparent group-hover/card:border-white/14 bg-[#0a0a0c] px-3.5 py-2.5 transition-colors">
+          <div className="flex items-center gap-1.5">
+            <span className="size-2.5 rounded-full bg-[#ff2047]" />
+            <span className="size-2.5 rounded-full bg-[#ffc53d]" />
+            <span className="size-2.5 rounded-full bg-[#11ff99]" />
+          </div>
+          <span className="font-mono text-2xs text-[#a1a4a5]">{project.slug}.ts</span>
+        </div>
+
+        {/* Media Preview Box */}
+        <a
+          href={primaryHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block overflow-hidden focus-visible:outline-none"
         >
           {project.image ? (
             <img
               src={project.image}
-              alt={`Screenshot of ${project.title}`}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              alt={project.title}
+              className="h-44 w-full object-cover object-top transition-transform duration-500 group-hover/card:scale-[1.03] sm:h-48"
             />
           ) : (
-            <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-b-[1.75rem] bg-slate-950/10 px-5 text-center text-sm text-muted-foreground">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-surface-strong text-primary">
-                <Search className="size-5" aria-hidden />
+            <div className="flex h-44 w-full items-center justify-center font-mono text-xs text-[#a1a4a5] sm:h-48">
+              {project.title}
+            </div>
+          )}
+        </a>
+      </div>
+
+      {/* Header & Links */}
+      <div className="flex items-center justify-between gap-3 mt-1">
+        <h3 className="min-w-0 truncate text-sm sm:text-base font-semibold leading-snug">
+          <a
+            href={primaryHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#fcfdff] hover:text-[#3b9eff] transition-colors"
+          >
+            {project.title}
+          </a>
+        </h3>
+
+        <div className="flex shrink-0 items-center gap-1.5">
+          {project.links.demo && (
+            <a
+              href={project.links.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 rounded-full border border-transparent bg-[#101012] px-2.5 py-0.5 font-mono text-xs font-medium text-[#3b9eff] hover:bg-white/10 hover:border-white/30 transition-all"
+            >
+              <VideoIcon className="size-3 shrink-0" />
+              Demo
+            </a>
+          )}
+          {project.links.live && (
+            <a
+              href={project.links.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 rounded-full border border-transparent bg-[#101012] px-2.5 py-0.5 font-mono text-xs font-medium text-[#fcfdff] hover:bg-white/10 hover:border-white/30 transition-all"
+            >
+              Live
+            </a>
+          )}
+          {project.links.github && (
+            <a
+              href={project.links.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 rounded-full border border-transparent bg-[#101012] px-2.5 py-0.5 font-mono text-xs font-medium text-[#fcfdff] hover:bg-white/10 hover:border-white/30 transition-all"
+            >
+              <GithubIcon className="size-3 shrink-0" />
+              Code
+            </a>
+          )}
+        </div>
+      </div>
+
+      {/* Tagline & One-line Description */}
+      <p className="text-xs text-[#a1a4a5] line-clamp-2 leading-relaxed">{project.description}</p>
+
+      {/* Stack Chips & Case Study Dialog Button */}
+      <div className="flex items-center justify-between gap-2 mt-auto pt-2">
+        <ul className="flex flex-wrap gap-1.5 items-center">
+          {project.stack.map((tech) => (
+            <li key={tech}>
+              <SkillIcon name={tech} size="sm" showLabel={false} />
+            </li>
+          ))}
+        </ul>
+
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+          <DialogTrigger asChild>
+            <Button
+              size="xs"
+              variant="ghost"
+              className="text-xs h-6 px-2 text-[#a1a4a5] hover:text-[#fcfdff]"
+            >
+              <span>Details</span>
+              <ArrowUpRightIcon className="size-3 ml-1" />
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent className="max-w-lg max-h-[85vh] overflow-y-auto bg-[#0a0a0c] border border-white/14 text-[#fcfdff]">
+            <DialogHeader>
+              <div className="flex items-center gap-2 mb-1">
+                <Badge variant="default" className="font-mono text-2xs">
+                  {project.period}
+                </Badge>
+                {project.tags.map((t) => (
+                  <Badge key={t} variant="secondary" className="text-2xs">
+                    {t}
+                  </Badge>
+                ))}
               </div>
+              <DialogTitle className="text-lg font-bold text-[#fcfdff]">
+                {project.title}
+              </DialogTitle>
+              <DialogDescription className="text-xs text-[#3b9eff] font-medium">
+                {project.tagline}
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="flex flex-col gap-4 py-2 text-xs text-[#a1a4a5] leading-relaxed">
               <div>
-                <p className="font-semibold text-foreground">Project preview</p>
-                <p className="mt-1 text-[0.72rem] text-muted-foreground">
-                  Add a screenshot or illustration for this project later.
+                <h4 className="font-mono text-xs font-bold text-[#fcfdff] uppercase mb-1">
+                  My Role
+                </h4>
+                <p className="text-[#fcfdff]">{project.role}</p>
+              </div>
+
+              <div>
+                <h4 className="font-mono text-xs font-bold text-[#fcfdff] uppercase mb-1.5">
+                  Key Features
+                </h4>
+                <ul className="flex flex-col gap-1.5">
+                  {project.features.map((f) => (
+                    <li key={f} className="flex items-start gap-2">
+                      <CheckCircle2Icon className="size-3.5 text-[#11ff99] shrink-0 mt-0.5" />
+                      <span className="text-[#fcfdff]">{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <h4 className="font-mono text-xs font-bold text-[#fcfdff] uppercase mb-1">
+                  Engineering Challenge
+                </h4>
+                <p className="rounded-md bg-[#101012] border border-white/14 p-3 text-[#fcfdff]">
+                  {project.challenge}
                 </p>
               </div>
             </div>
-          )}
-          <div className="absolute inset-0 grid-lines opacity-60 transition-transform duration-[1200ms] group-hover:scale-110" />
-          <div className="absolute inset-0 bg-linear-to-t from-card via-card/40 to-transparent" />
-          <div className="absolute -top-8 -right-6 size-40 rounded-full bg-primary/20 blur-3xl transition-opacity duration-700 group-hover:opacity-100 sm:opacity-60" />
-          <span className="absolute bottom-4 left-6 font-mono text-[0.65rem] tracking-[0.25em] text-primary uppercase">
-            {project.period}
-          </span>
-          {project.featured && (
-            <span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-full bg-surface-strong px-2.5 py-1 text-[0.6rem] font-semibold tracking-wider text-primary uppercase">
-              <Star className="size-2.5" aria-hidden />
-              Featured
-            </span>
-          )}
-        </div>
 
-        <div className="flex flex-1 flex-col p-6">
-          <h3 className="text-lg leading-snug font-semibold tracking-tight text-foreground">
-            {project.title}
-          </h3>
-          <p className="mt-1.5 text-[0.8rem] text-primary">{project.tagline}</p>
-          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{project.description}</p>
-
-          <div className="mt-5 flex flex-wrap gap-1.5">
-            {project.stack.map((t) => (
-              <span
-                key={t}
-                className="rounded-full border border-border px-2.5 py-1 font-mono text-[0.63rem] text-muted-foreground"
-              >
-                {t}
-              </span>
-            ))}
-          </div>
-
-          <AnimatePresence initial={false}>
-            {expanded && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.4, ease }}
-                className="overflow-hidden"
-              >
-                <div className="mt-6 space-y-4 border-t border-border pt-5">
-                  <div>
-                    <p className="text-[0.63rem] font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-                      My role
-                    </p>
-                    <p className="mt-1.5 text-sm text-foreground">{project.role}</p>
-                  </div>
-                  <div>
-                    <p className="text-[0.63rem] font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-                      Key features
-                    </p>
-                    <ul className="mt-2 space-y-1.5">
-                      {project.features.map((f) => (
-                        <li key={f} className="relative pl-4 text-sm text-muted-foreground">
-                          <span
-                            aria-hidden
-                            className="absolute top-2 left-0 size-1.5 rounded-full bg-primary/70"
-                          />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <p className="text-[0.63rem] font-semibold tracking-[0.2em] text-muted-foreground uppercase">
-                      Hardest problem
-                    </p>
-                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                      {project.challenge}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div className="mt-auto flex flex-wrap items-center gap-2 pt-6">
-            <button
-              onClick={toggle}
-              aria-expanded={expanded}
-              className="inline-flex min-h-9 items-center gap-1.5 rounded-full accent-gradient px-4 py-2 text-[0.75rem] font-semibold text-primary-foreground transition-transform duration-300 hover:scale-[1.04]"
-            >
-              {expanded ? "Hide case study" : "Case study"}
-              <ArrowUpRight className="size-3.5" aria-hidden />
-            </button>
-            {project.links.github && (
-              <a
-                href={project.links.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-border px-4 py-2 text-[0.75rem] font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
-              >
-                <Github className="size-3.5" aria-hidden />
-                Code
-              </a>
-            )}
-            {((project.links.live || project.links.github) && (
-              <a
-                href={project.links.live ?? project.links.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-border px-4 py-2 text-[0.75rem] font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
-                aria-label={project.links.live ? `View live project ${project.title}` : `View project ${project.title}`}
-              >
-                <ExternalLink className="size-3.5" aria-hidden />
-                {project.links.live ? "Live" : "View"}
-              </a>
-            ))}
-          </div>
-        </div>
-      </article>
-    </Tilt>
+            <div className="flex items-center flex-wrap gap-2 pt-2 border-t border-white/14">
+              {project.links.github && (
+                <Button size="xs" variant="ghost" asChild>
+                  <a href={project.links.github} target="_blank" rel="noopener noreferrer">
+                    <GithubIcon className="size-3" />
+                    GitHub Repository
+                  </a>
+                </Button>
+              )}
+              {project.links.live && (
+                <Button size="xs" variant="default" asChild>
+                  <a href={project.links.live} target="_blank" rel="noopener noreferrer">
+                    <ExternalLinkIcon className="size-3" />
+                    Live Application
+                  </a>
+                </Button>
+              )}
+              {project.links.demo && (
+                <Button
+                  size="xs"
+                  variant="secondary"
+                  asChild
+                  className="bg-[#3b9eff]/15 text-[#3b9eff] hover:bg-[#3b9eff]/25"
+                >
+                  <a href={project.links.demo} target="_blank" rel="noopener noreferrer">
+                    <VideoIcon className="size-3" />
+                    Demo Video
+                  </a>
+                </Button>
+              )}
+            </div>
+          </DialogContent>
+        </Dialog>
+      </div>
+    </div>
   );
-});
+}
 
 export const Projects = memo(function Projects() {
   const [filter, setFilter] = useState<string>("All");
-  const [query, setQuery] = useState("");
 
-  const visible = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    return projects
-      .filter((p) => (filter === "All" ? true : p.tags.includes(filter)))
-      .filter((p) =>
-        q
-          ? [p.title, p.description, p.tagline, ...p.stack].join(" ").toLowerCase().includes(q)
-          : true,
-      )
-      .sort((a, b) => Number(b.featured) - Number(a.featured));
-  }, [filter, query]);
+  const visibleProjects = useMemo(() => {
+    return projects.filter((p) => (filter === "All" ? true : p.tags.includes(filter)));
+  }, [filter]);
 
   return (
-    <Section
+    <section
+      aria-labelledby="projects-heading"
       id="projects"
-      index="04"
-      eyebrow="Selected work"
-      title={
-        <>
-          Systems I designed,{" "}
-          <span className="bg-clip-text text-transparent accent-gradient">built and shipped</span>.
-        </>
-      }
-      description="Six projects spanning applied AI, layered backends and full-stack products. Open a case study for role, features and the hardest problem."
+      className="relative overflow-hidden w-full py-6"
     >
-      <Reveal className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filter projects">
-          {projectFilters.map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              aria-pressed={filter === f}
-              className="relative min-h-9 rounded-full px-4 py-2 text-[0.78rem] font-medium text-muted-foreground transition-colors hover:text-foreground"
+      <SectionBackground variant="projects" />
+      <div className="relative z-10">
+        <SectionHeading
+          id="projects-heading"
+          action={
+            <ToggleGroup
+              type="single"
+              value={filter}
+              onValueChange={(v) => v && setFilter(v)}
+              className="gap-0.5"
             >
-              {filter === f && (
-                <motion.span
-                  layoutId="project-filter"
-                  className="absolute inset-0 rounded-full bg-surface-strong"
-                  transition={springSnappy}
-                />
-              )}
-              <span className={`relative ${filter === f ? "text-foreground" : ""}`}>{f}</span>
-            </button>
-          ))}
-        </div>
+              {projectFilters.map((f) => (
+                <ToggleGroupItem
+                  key={f}
+                  value={f}
+                  className="text-xs px-2.5 py-0.5 h-6 rounded-full border border-white/14 bg-[#101012] text-[#a1a4a5] data-[state=on]:bg-[#fcfdff] data-[state=on]:text-[#000000]"
+                >
+                  {f}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+          }
+        >
+          Projects
+        </SectionHeading>
 
-        <div className="glass flex items-center gap-2 rounded-full px-4 py-2 sm:w-64">
-          <Search className="size-3.5 shrink-0 text-muted-foreground" aria-hidden />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search projects"
-            aria-label="Search projects"
-            className="w-full bg-transparent text-[0.8rem] text-foreground outline-none placeholder:text-muted-foreground"
+        {/* 2-Column Grid Bounded by Translucent Hairline Divider */}
+        <div className="relative border-b border-white/06">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute top-0 bottom-0 left-1/2 z-0 hidden w-px bg-white/06 sm:block"
           />
+
+          <div className="grid grid-cols-1 sm:grid-cols-2">
+            {visibleProjects.map((project) => (
+              <ProjectCard key={project.slug} project={project} />
+            ))}
+          </div>
         </div>
-      </Reveal>
-
-      <motion.div layout className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-        <AnimatePresence mode="popLayout">
-          {visible.map((p) => (
-            <motion.div
-              key={p.slug}
-              layout
-              initial={{ opacity: 0, scale: 0.96, filter: "blur(8px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              exit={{ opacity: 0, scale: 0.96, filter: "blur(8px)" }}
-              transition={{ duration: 0.4, ease }}
-            >
-              <ProjectCard project={p} />
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </motion.div>
-
-      {!visible.length && (
-        <p className="py-12 text-center text-sm text-muted-foreground">
-          No projects match that search.
-        </p>
-      )}
-    </Section>
+      </div>
+    </section>
   );
 });
