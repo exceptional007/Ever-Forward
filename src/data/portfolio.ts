@@ -329,6 +329,31 @@ export const projects: Project[] = [
     image: "/autopay.png",
   },
   {
+    slug: "quizx",
+    title: "QuizX: Multi-Faculty Online Assessment Platform",
+    period: "2026",
+    tagline: "Multi-faculty assessment platform with browser-native Gemini AI quiz generation.",
+    role: "Full-stack & AI Engineer (Gemini AI Engine, Document Parser, Exam Security Guard)",
+    description:
+      "An end-to-end multi-faculty online quiz and assessment platform enabling educators to build structured exams, process uploaded PDF/DOCX materials into quizzes via client-side Gemini AI, and manage secure student examination flows.",
+    features: [
+      "Browser-native Google Gemini AI generator (@google/genai) supporting MCQ, True/False, and Short Answer creation with automatic retries & JSON schema enforcement",
+      "Document parser integration (PDF.js & Mammoth.js) for instant quiz generation from raw text documents with visual low-confidence question flagging",
+      "Hardened student examination portal with closed-quiz status guards, passcode verification, and access state handling",
+      "Multi-faculty database architecture powered by Supabase RLS for real-time exam creation, timing controls, and student attempt scoring",
+    ],
+    challenge:
+      "Porting AI question generation to the browser using @google/genai while strictly validating multi-format JSON output schemas, handling API fallbacks, and securing exam gatekeeping states.",
+    stack: ["React", "TypeScript", "Tailwind CSS", "Google GenAI", "Supabase", "PDF.js"],
+    tags: ["AI/ML", "Full-stack"],
+    featured: true,
+    links: {
+      github: "https://github.com/shubhamprajapati18/QuizX.git",
+      live: "https://quizxbit.netlify.app/",
+    },
+    image: "/quizx.png",
+  },
+  {
     slug: "inca",
     title: "INCA: Intelligent Campus Assistant",
     period: "Jul 2026 – Present",

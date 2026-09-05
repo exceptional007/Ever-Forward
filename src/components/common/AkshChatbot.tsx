@@ -157,7 +157,7 @@ export const AkshChatbot = memo(function AkshChatbot() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="fixed bottom-6 right-6 z-50 flex items-center gap-3"
+            className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-50 flex items-center gap-3"
           >
             {/* Rotating Typewriter Greeting Bubble */}
             {showGreetingBubble && (
@@ -210,7 +210,7 @@ export const AkshChatbot = memo(function AkshChatbot() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.88, y: 24 }}
             transition={{ type: "spring", stiffness: 320, damping: 26 }}
-            className="fixed bottom-6 right-4 sm:right-6 z-50 flex h-[370px] sm:h-[380px] w-[calc(100vw-2rem)] sm:w-[300px] flex-col overflow-hidden rounded-2xl border border-white/14 bg-[#0a0a0c]/95 backdrop-blur-xl shadow-2xl p-0 font-sans text-[#fcfdff]"
+            className="fixed bottom-20 right-4 sm:bottom-6 sm:right-6 z-50 flex h-[370px] sm:h-[380px] w-[calc(100vw-2rem)] sm:w-[300px] flex-col overflow-hidden rounded-2xl border border-white/14 bg-[#0a0a0c]/95 backdrop-blur-xl shadow-2xl p-0 font-sans text-[#fcfdff]"
           >
             <Card className="flex flex-col h-full rounded-none border-none bg-transparent shadow-none p-0">
               {/* Header with Larger Avatar, Green Online Dot & No Subtitle */}

@@ -45,6 +45,8 @@ function ExperienceRow({ experience, index }: { experience: ExperienceType; inde
               <img
                 src={experience.logo}
                 alt={experience.company}
+                loading="lazy"
+                decoding="async"
                 className="size-full object-cover rounded-xl"
                 onError={(e) => {
                   (e.target as HTMLElement).style.display = "none";
