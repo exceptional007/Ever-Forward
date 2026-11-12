@@ -1,3 +1,4 @@
+import { navigatePortfolio } from "@/lib/gsap-motion";
 import { memo, useEffect, useMemo, useState } from "react";
 import {
   CommandDialog,
@@ -66,15 +67,7 @@ export const CommandPalette = memo(function CommandPalette({ open, onOpenChange 
               value={`go ${s.label}`}
               onSelect={() => {
                 onOpenChange(false);
-                if (s.id === "cv") {
-                  window.location.hash = "#cv";
-                } else {
-                  if (window.location.hash === "#cv") {
-                    window.location.hash = s.id === "hero" ? "" : `#${s.id}`;
-                  } else {
-                    document.getElementById(s.id)?.scrollIntoView({ behavior: "smooth" });
-                  }
-                }
+                navigatePortfolio(s.id);
               }}
             >
               <Compass className="size-4" aria-hidden />

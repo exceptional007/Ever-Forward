@@ -10,7 +10,7 @@ export const profile = {
   summary:
     "Full-stack engineer shipping AI-integrated production systems across React/TypeScript, .NET Web API and FastAPI. I own features end to end: layered backend architecture, REST API design, RAG pipelines, vector search and CI-ready test automation.",
   longSummary:
-    "I'm a final-year CSE (Data Science) student at Buddha Institute of Technology, Gorakhpur, currently working as an AI Engineer Intern at String AI India. My work sits where product engineering meets applied AI: multilingual NLP pipelines, retrieval-augmented investigation tooling, and layered .NET/FastAPI services that hold up in production.",
+    "I'm a final-year CSE (Data Science) student at Buddha Institute of Technology, Gorakhpur, with 6 months of internship experience at String AI India. My work sits where product engineering meets applied AI: multilingual NLP pipelines, retrieval-augmented investigation tooling, and layered .NET/FastAPI services that hold up in production.",
   focus:
     "Right now I'm deep in retrieval systems (embeddings, vector stores and evaluation) while keeping strong CS fundamentals sharp through daily DSA practice.",
   availability: "Open to SWE internship & new-grad roles",
@@ -29,7 +29,7 @@ export const stats = [
   { label: "Academic average", value: 82.27, suffix: "%" },
   { label: "Indian languages supported", value: 22, suffix: "" },
   { label: "Hackathon podiums", value: 3, suffix: "" },
-  { label: "Months shipping in production", value: 7, suffix: "+" },
+  { label: "Months of internship experience", value: 6, suffix: "" },
 ] as const;
 
 export const timeline = [
@@ -62,7 +62,7 @@ export const timeline = [
 export type SkillGroup = {
   category: string;
   icon: string;
-  items: { name: string; level: number }[];
+  items: { name: string }[];
 };
 
 export const skillGroups: SkillGroup[] = [
@@ -70,75 +70,76 @@ export const skillGroups: SkillGroup[] = [
     category: "Languages",
     icon: "Code2",
     items: [
-      { name: "Python", level: 92 },
-      { name: "JavaScript / TypeScript", level: 88 },
-      { name: "C#", level: 78 },
-      { name: "Java", level: 74 },
-      { name: "C", level: 80 },
-      { name: "SQL", level: 85 },
+      { name: "Python" },
+      { name: "JavaScript / TypeScript" },
+      { name: "C#" },
+      { name: "Java" },
+      { name: "C" },
+      { name: "SQL" },
     ],
   },
   {
     category: "Frontend",
     icon: "MonitorSmartphone",
     items: [
-      { name: "React.js", level: 90 },
-      { name: "Tailwind CSS", level: 88 },
-      { name: "Streamlit", level: 82 },
-      { name: "Component libraries", level: 85 },
+      { name: "React.js" },
+      { name: "Tailwind CSS" },
+      { name: "Streamlit" },
+      { name: "Component libraries" },
     ],
   },
   {
     category: "Backend",
     icon: "Server",
     items: [
-      { name: "FastAPI", level: 90 },
-      { name: ".NET Core Web API", level: 82 },
-      { name: "Node.js / Express", level: 80 },
-      { name: "Django", level: 78 },
-      { name: "Celery / Redis", level: 76 },
+      { name: "FastAPI" },
+      { name: ".NET Core Web API" },
+      { name: "Node.js / Express" },
+      { name: "Django" },
+      { name: "Celery / Redis" },
     ],
   },
   {
     category: "Databases",
     icon: "Database",
     items: [
-      { name: "PostgreSQL", level: 88 },
-      { name: "MongoDB", level: 78 },
-      { name: "MySQL", level: 80 },
-      { name: "Qdrant", level: 84 },
-      { name: "ChromaDB", level: 76 },
+      { name: "PostgreSQL" },
+      { name: "MongoDB" },
+      { name: "MySQL" },
+      { name: "Qdrant" },
+      { name: "ChromaDB" },
     ],
   },
   {
     category: "AI / ML",
     icon: "Brain",
     items: [
-      { name: "RAG pipelines", level: 88 },
-      { name: "OpenAI API", level: 88 },
-      { name: "Embeddings & vector search", level: 85 },
-      { name: "Pandas / NumPy", level: 84 },
-      { name: "OCR & entity extraction", level: 80 },
+      { name: "RAG pipelines" },
+      { name: "OpenAI API" },
+      { name: "Embeddings & vector search" },
+      { name: "Pandas / NumPy" },
+      { name: "OCR & entity extraction" },
     ],
   },
   {
     category: "Cloud & DevOps",
     icon: "Cloud",
     items: [
-      { name: "Azure (App Service, ML, CLI)", level: 80 },
-      { name: "Docker", level: 82 },
-      { name: "Git / GitHub", level: 90 },
-      { name: "Vercel / Render", level: 86 },
+      { name: "Azure (App Service, ML, CLI)" },
+      { name: "Docker" },
+      { name: "Git / GitHub" },
+      { name: "Vercel / Render / Netlify" },
+      { name: "AWS S3" },
     ],
   },
   {
     category: "Tooling & QA",
     icon: "Wrench",
     items: [
-      { name: "Playwright API testing", level: 82 },
-      { name: "Postman", level: 88 },
-      { name: "DBeaver", level: 80 },
-      { name: "EF Core (Code-First)", level: 78 },
+      { name: "Playwright API testing" },
+      { name: "Postman" },
+      { name: "DBeaver" },
+      { name: "EF Core (Code-First)" },
     ],
   },
 ];
@@ -187,12 +188,9 @@ export const experiences: Experience[] = [
     summary:
       "Owned multilingual AI safety tooling and two full-stack AI products from architecture through release.",
     highlights: [
-      "Architected a Unicode-aware multilingual text processing pipeline for 22 Indian languages (normalization, script-specific tokenization, Indic digit conversion and pattern matching), improving AI safety classification accuracy.",
-      "Extended NLP preprocessing across multiple Indic scripts and language-specific lexical patterns, increasing detection coverage for multilingual user-generated content.",
-      "Architected an AI-powered Fraud Detection & Investigation Portal covering OCR document intake, entity extraction, RAG investigation chat, audit logging and role-based access for admin, investigator and auditor roles.",
-      "Designed a Patient & Farmer Management System on a layered architecture with the Repository pattern and EF Core (Code-First); shipped AI medical summaries and crop advisory via the OpenAI API.",
-      "Built a Playwright API test suite over auth and CRUD flows, catching regressions before release.",
-      "Built a reusable React component library adopted across internal projects, cutting duplicate UI work.",
+      "Raised safety classification accuracy from 82% to 94% on 5,000 samples across 22 Indian languages.",
+      "Processed 500+ investigation records at 92% OCR accuracy across 3 roles; shipped 12 REST endpoints and AI summaries averaging 1.5 seconds.",
+      "Built 120 API and 141 UI Playwright tests (261 total), with a 100% pass rate across recorded runs.",
     ],
     stack: [
       "FastAPI",
@@ -215,10 +213,9 @@ export const experiences: Experience[] = [
     logo: "/stringaiindialogo.png",
     summary: "Built retrieval infrastructure and standardized deployments across environments.",
     highlights: [
-      "Built a Retrieval-Augmented Generation document assistant with embeddings in Qdrant Cloud and metadata in PostgreSQL.",
-      "Offloaded long-running jobs to Celery workers backed by Redis for predictable request latency.",
-      "Containerized services with Docker and deployed to Azure (Azure ML, Azure CLI), standardizing dev and staging environments.",
-      "Migrated a Medicine Inventory system from .NET/React/MS SQL Server to FastAPI/Streamlit/PostgreSQL with full feature parity.",
+      "Indexed 100+ documents with 90% Recall@5 across 100 benchmark queries using Celery/Redis ingestion.",
+      "Containerized 3 services and deployed to 3 Azure hosting targets with 4 supporting services.",
+      "Migrated existing records with 100% feature parity across 5 modules and 3 database tables.",
     ],
     stack: ["Python", "OpenAI", "Qdrant Cloud", "PostgreSQL", "Celery", "Redis", "Docker", "Azure"],
   },
@@ -360,16 +357,16 @@ export const projects: Project[] = [
     tagline: "An AI operating layer for an entire campus.",
     role: "Lead developer (architecture, AI modules, frontend)",
     description:
-      "AI-powered campus management platform unifying attendance, notices, AI tutoring, lost & found and analytics into a single web application. Runner-up at Tech-Yuva 10.0.",
+      "Campus platform for 6 roles with offline attendance, AI tutoring and timetable extraction.",
     features: [
-      "Smart attendance with vision-assisted verification",
+      "Offline attendance with automatic sync",
       "AI tutoring chatbot grounded in course material",
-      "AI-vision Lost & Found matching",
+      "Gemini timetable extraction with admin review and conflict detection",
       "Notice distribution and campus analytics dashboards",
     ],
     challenge:
       "Keeping several AI subsystems inside one coherent product surface without letting latency or cost blow up: solved with cached embeddings and task-specific model routing.",
-    stack: ["React", "FastAPI", "PostgreSQL", "OpenAI", "Vector search"],
+    stack: ["React", "TypeScript", "NestJS", "PostgreSQL", "Gemini"],
     tags: ["AI/ML", "Full-stack"],
     featured: true,
     links: {
@@ -622,11 +619,9 @@ export const faqItems: FaqItem[] = [
 export const navSections = [
   { id: "hero", label: "Home" },
   { id: "about", label: "About" },
-  { id: "skills", label: "Skills" },
   { id: "experience", label: "Experience" },
-  { id: "projects", label: "Projects" },
-  { id: "achievements", label: "Achievements" },
-  { id: "cv", label: "CV" },
-  { id: "faq", label: "FAQ" },
+  { id: "projects", label: "Work" },
+  { id: "skills", label: "Stack" },
   { id: "contact", label: "Contact" },
+  { id: "cv", label: "Resume" },
 ] as const;

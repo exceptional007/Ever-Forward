@@ -115,7 +115,9 @@ const GRAIN_SVG = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/
 // Web Audio API synthesized paper tear sound generator
 const playPaperTearSound = () => {
   try {
-    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    const AudioCtx =
+      window.AudioContext ||
+      (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
     if (!AudioCtx) return;
     const ctx = new AudioCtx();
 
@@ -294,7 +296,7 @@ export const Resume = memo(function Resume() {
         {downloadSuccess && (
           <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl border border-[#11ff99]/30 bg-[#0a0a0c]/95 px-4 py-3 text-xs font-semibold text-[#11ff99] shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-4">
             <CheckCircle2 className="size-4 text-[#11ff99]" />
-            <span>Akshhat_Srivastava_Resume.pdf downloaded to your device!</span>
+            <span>Akshhat_Srivastava_Resume.pdf opened — save the PDF from your browser.</span>
           </div>
         )}
 

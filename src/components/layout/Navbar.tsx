@@ -43,7 +43,7 @@ export const Navbar = memo(function Navbar({
   );
 
   return (
-    <header className="sticky top-0 isolate z-50 w-full bg-[#000000]/90 backdrop-blur-md border-b border-white/06">
+    <header className="hidden md:block sticky top-0 isolate z-50 w-full bg-[#000000]/90 backdrop-blur-md border-b border-white/06">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 h-16 flex items-center justify-between">
         {/* Brand Wordmark */}
         <button
@@ -59,7 +59,7 @@ export const Navbar = memo(function Navbar({
           aria-label="Main navigation"
           className="hidden md:flex items-center gap-6 text-sm text-[#a1a4a5]"
         >
-          {navSections.slice(1, 7).map((s) => {
+          {navSections.slice(1, 6).map((s) => {
             const isActive =
               (s.id === "cv" && currentView === "cv") ||
               (s.id !== "cv" && currentView === "home" && false);
@@ -105,10 +105,10 @@ export const Navbar = memo(function Navbar({
           <Button
             variant="default"
             size="xs"
-            onClick={() => go("contact")}
+            onClick={() => go("cv")}
             className="hidden sm:inline-flex"
           >
-            Contact
+            Resume
           </Button>
 
           {/* Mobile Menu */}

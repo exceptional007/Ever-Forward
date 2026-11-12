@@ -56,7 +56,7 @@ export const AkshChatbot = memo(function AkshChatbot() {
   // Show greeting bubble after brief entrance delay
   useEffect(() => {
     const timer = setTimeout(() => {
-      setShowGreetingBubble(true);
+      setShowGreetingBubble(false);
     }, 1000);
     return () => clearTimeout(timer);
   }, []);
@@ -65,7 +65,7 @@ export const AkshChatbot = memo(function AkshChatbot() {
   useEffect(() => {
     if (!showGreetingBubble || isOpen) return;
 
-    const currentFullText = GREETING_TEXTS[textIndex];
+    const currentFullText = GREETING_TEXTS[textIndex] ?? "Ask about my work";
     const typingSpeed = isDeleting ? 30 : 60;
 
     const handleTyping = () => {
@@ -131,7 +131,7 @@ export const AkshChatbot = memo(function AkshChatbot() {
         {
           role: "assistant",
           content:
-            "Akshhat specializes in Python, TypeScript, React, FastAPI, .NET Core, and RAG AI pipelines! Feel free to ask more.",
+            "I couldn’t connect right now. Please try again, or email Akshhat at akshhatsri7843@gmail.com.",
         },
       ]);
     } finally {
@@ -242,6 +242,7 @@ export const AkshChatbot = memo(function AkshChatbot() {
                         type="button"
                         variant="ghost"
                         size="icon"
+                        aria-label="Reset chat"
                         onClick={handleClear}
                         className="size-6.5 rounded-lg text-[#a1a4a5] hover:text-[#fcfdff] hover:bg-white/10 transition-colors"
                       >
@@ -262,6 +263,7 @@ export const AkshChatbot = memo(function AkshChatbot() {
                         type="button"
                         variant="ghost"
                         size="icon"
+                        aria-label="Close chat"
                         onClick={() => setIsOpen(false)}
                         className="size-6.5 rounded-lg text-[#a1a4a5] hover:text-[#fcfdff] hover:bg-white/10 transition-colors"
                       >
@@ -281,6 +283,7 @@ export const AkshChatbot = memo(function AkshChatbot() {
               {/* Messages Body */}
               <CardContent className="relative flex-1 p-0 overflow-hidden">
                 <div
+                  data-chat-scroll
                   ref={scrollContainerRef}
                   onScroll={handleScroll}
                   className="h-full overflow-y-auto p-2.5 pt-1"
@@ -393,6 +396,7 @@ export const AkshChatbot = memo(function AkshChatbot() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
+                      aria-label="Scroll to latest message"
                       onClick={scrollToBottom}
                       className="absolute bottom-2 right-3 z-10 flex items-center gap-1 rounded-full border border-white/14 bg-[#141418]/95 px-2 py-0.5 text-[10px] font-sans text-[#fcfdff] shadow-lg backdrop-blur-md hover:bg-white/10 transition-colors cursor-pointer"
                     >
@@ -420,6 +424,7 @@ export const AkshChatbot = memo(function AkshChatbot() {
                 />
                 <Button
                   type="button"
+                  aria-label="Send message"
                   onClick={handleSend}
                   size="icon"
                   disabled={!input.trim() || loading}

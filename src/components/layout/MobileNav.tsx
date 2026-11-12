@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { gsap, prefersReducedMotion } from "@/lib/gsap-motion";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Home,
@@ -10,7 +11,6 @@ import {
   X,
   UserCheck,
   Trophy,
-  HelpCircle,
   Mail,
   Search,
   Sparkles,
@@ -39,6 +39,39 @@ export function MobileNav({ currentView, onNavigate, onOpenPalette }: MobileNavP
   const [activeSection, setActiveSection] = useState<string>("hero");
   const [showMoreMenu, setShowMoreMenu] = useState(false);
 
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const indicatorRef = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const indicator = indicatorRef.current;
+    const tabs = tabsRef.current;
+    if (!indicator || !tabs) return;
+    const update = () => {
+      const id = showMoreMenu ? "more" : currentView === "cv" ? "cv" : activeSection;
+      const tab = tabs.querySelector<HTMLElement>('[data-tab="' + id + '"]');
+      if (!tab) {
+        gsap.set(indicator, { opacity: 0 });
+        return;
+      }
+      gsap.to(indicator, {
+        x: tab.offsetLeft,
+        y: tab.offsetTop,
+        width: tab.offsetWidth,
+        height: tab.offsetHeight,
+        opacity: 1,
+        duration: prefersReducedMotion() ? 0 : 0.3,
+        ease: "power3.out",
+        overwrite: true,
+      });
+    };
+    update();
+    const resize = new ResizeObserver(update);
+    resize.observe(tabs);
+    return () => {
+      resize.disconnect();
+      gsap.killTweensOf(indicator);
+    };
+  }, [activeSection, currentView, showMoreMenu]);
+
   // Track active section on scroll
   useEffect(() => {
     if (currentView === "cv") {
@@ -53,7 +86,6 @@ export function MobileNav({ currentView, onNavigate, onOpenPalette }: MobileNavP
       "experience",
       "about",
       "achievements",
-      "faq",
       "contact",
     ];
     const handleScroll = () => {
@@ -133,7 +165,12 @@ export function MobileNav({ currentView, onNavigate, onOpenPalette }: MobileNavP
           <GripHorizontal className="w-6 h-3 text-white/30 hover:text-white/60 transition-colors" />
         </div>
 
-        <div className="flex items-center justify-around max-w-lg mx-auto relative">
+        <div ref={tabsRef} className="flex items-center justify-around max-w-lg mx-auto relative">
+          <div
+            ref={indicatorRef}
+            aria-hidden
+            className="absolute left-0 top-0 pointer-events-none bg-white/12 border border-white/16 rounded-xl shadow-inner"
+          />
           {TABS.map((tab) => {
             const Icon = tab.icon;
             const isActive =
@@ -143,18 +180,13 @@ export function MobileNav({ currentView, onNavigate, onOpenPalette }: MobileNavP
             return (
               <button
                 key={tab.id}
+                data-tab={tab.id}
+                aria-current={isActive ? "location" : undefined}
                 onClick={() => handleTabClick(tab.id)}
                 className={`relative flex flex-col items-center justify-center py-1 px-2.5 rounded-xl min-w-[54px] min-h-[44px] transition-all duration-200 active:scale-95 ${
                   isActive ? "text-white" : "text-zinc-400 hover:text-zinc-200"
                 }`}
               >
-                {isActive && (
-                  <motion.div
-                    layoutId="mobileTabActive"
-                    className="absolute inset-0 bg-white/12 border border-white/16 rounded-xl shadow-inner"
-                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                  />
-                )}
                 <Icon
                   className={`w-4.5 h-4.5 relative z-10 ${isActive ? "text-white scale-110" : ""}`}
                 />
@@ -171,18 +203,13 @@ export function MobileNav({ currentView, onNavigate, onOpenPalette }: MobileNavP
 
           {/* More Sheet Trigger Button */}
           <button
+            data-tab="more"
+            aria-expanded={showMoreMenu}
             onClick={() => setShowMoreMenu(true)}
             className={`relative flex flex-col items-center justify-center py-1 px-2.5 rounded-xl min-w-[54px] min-h-[44px] transition-all duration-200 active:scale-95 ${
               showMoreMenu ? "text-white" : "text-zinc-400 hover:text-zinc-200"
             }`}
           >
-            {showMoreMenu && (
-              <motion.div
-                layoutId="mobileTabActive"
-                className="absolute inset-0 bg-white/12 border border-white/16 rounded-xl shadow-inner"
-                transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              />
-            )}
             <Menu
               className={`w-4.5 h-4.5 relative z-10 ${showMoreMenu ? "text-white scale-110" : ""}`}
             />
@@ -252,17 +279,6 @@ export function MobileNav({ currentView, onNavigate, onOpenPalette }: MobileNavP
                   <div>
                     <div className="text-sm font-medium text-white">Achievements</div>
                     <div className="text-[11px] text-zinc-400">Awards & podiums</div>
-                  </div>
-                </button>
-
-                <button
-                  onClick={() => handleTabClick("faq")}
-                  className="flex items-center gap-3 p-3.5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 active:scale-98 text-left transition-all"
-                >
-                  <HelpCircle className="w-5 h-5 text-purple-400" />
-                  <div>
-                    <div className="text-sm font-medium text-white">FAQ</div>
-                    <div className="text-[11px] text-zinc-400">Common questions</div>
                   </div>
                 </button>
 

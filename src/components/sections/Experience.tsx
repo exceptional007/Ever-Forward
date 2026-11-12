@@ -1,128 +1,58 @@
-import { memo } from "react";
-import { experiences, type Experience as ExperienceType } from "@/data/portfolio";
-import { SectionHeading } from "@/components/layout/Section";
-import { SectionBackground } from "@/components/layout/SectionBackground";
-import { SkillIcon } from "@/components/common/SkillIcon";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
-function getCompanyBadge(company: string) {
-  if (company.includes("String AI")) {
-    return { initials: "SA", color: "text-[#3b9eff] border-[#3b9eff]/30 bg-[#3b9eff]/10" };
-  }
-  if (company.includes("10-week")) {
-    return {
-      initials: "10W",
-      color: "text-[#3b9eff] border-transparent group-hover:border-[#3b9eff]/30 bg-[#3b9eff]/10",
-    };
-  }
-  if (company.includes("Buddha") || company.includes("IEEE")) {
-    return { initials: "BIT", color: "text-[#11ff99] border-[#11ff99]/30 bg-[#11ff99]/10" };
-  }
-  return {
-    initials: company.slice(0, 2).toUpperCase(),
-    color: "text-[#fcfdff] border-white/14 bg-white/05",
-  };
-}
-
-function ExperienceRow({ experience, index }: { experience: ExperienceType; index: number }) {
-  const badge = getCompanyBadge(experience.company);
-
+import { experiences } from "@/data/portfolio";
+const outcomes = [
+  [
+    "82% → 94% safety accuracy · 5,000 samples · 22 languages",
+    "120 API + 141 UI tests · 100% pass rate in recorded runs",
+    "500+ investigation records · 92% OCR accuracy",
+  ],
+  [
+    "100+ documents · 90% Recall@5 on 100 benchmark queries",
+    "3 Docker services · 3 Azure targets · 4 supporting services",
+    "100% feature parity · 5 modules · 3 migrated tables",
+  ],
+];
+export function Experience() {
   return (
-    <AccordionItem
-      value={`exp-${index}`}
-      className="group rounded-xl border border-transparent bg-[#08080c] transition-all duration-200 hover:border-white/25 hover:bg-[#0c0c10] my-2.5 overflow-hidden"
-    >
-      <AccordionTrigger hideChevron className="hover:no-underline px-4 py-4 sm:px-5">
-        <div className="flex items-center gap-3.5 w-full text-left">
-          {/* Company Logo / Badge */}
-          <div className="relative flex size-10 sm:size-11 shrink-0 items-center justify-center rounded-xl bg-[#0f0f14] overflow-hidden transition-transform duration-200 group-hover:scale-105 shadow-sm">
-            {experience.logo ? (
-              <img
-                src={experience.logo}
-                alt={experience.company}
-                loading="lazy"
-                decoding="async"
-                className="size-full object-cover rounded-xl"
-                onError={(e) => {
-                  (e.target as HTMLElement).style.display = "none";
-                  const sibling = (e.target as HTMLElement).nextElementSibling;
-                  if (sibling) (sibling as HTMLElement).style.display = "flex";
-                }}
-              />
-            ) : null}
-            <span
-              className={`flex size-full items-center justify-center font-mono text-xs font-bold ${
-                experience.logo ? "hidden" : ""
-              } ${badge.color}`}
-            >
-              {badge.initials}
-            </span>
-          </div>
-
-          <div className="min-w-0 flex-1">
-            <div className="flex items-baseline justify-between gap-3">
-              <h3 className="text-[#fcfdff] min-w-0 truncate text-sm sm:text-base font-semibold leading-snug">
-                {experience.company}
-              </h3>
-              <span className="text-[#a1a4a5] shrink-0 text-xs font-mono tabular-nums">
-                {experience.period}
-              </span>
+    <section id="experience" className="editorial-section" aria-labelledby="experience-heading">
+      <div className="editorial-heading">
+        <div>
+          <p className="eyebrow">02 / EXPERIENCE</p>
+          <h2 id="experience-heading">Built. Tested. Shipped.</h2>
+        </div>
+        <span className="section-note">6 MONTHS / STRING AI INDIA</span>
+      </div>
+      <div className="experience-list">
+        {experiences.slice(0, 2).map((job, index) => (
+          <article key={job.role} className="experience-row">
+            <div className="experience-date">
+              <span>{job.period}</span>
+              <span>{job.location}</span>
             </div>
-
-            <p className="text-[#a1a4a5] truncate text-xs leading-snug mt-1">
-              <span className="text-[#fcfdff] font-medium">{experience.role}</span>{" "}
-              <span className="text-white/30">•</span> {experience.location}
-            </p>
-          </div>
-        </div>
-      </AccordionTrigger>
-
-      <AccordionContent className="px-4 pb-5 pt-1 sm:px-5 sm:pl-18 text-xs leading-relaxed text-[#rgba(252,253,255,0.86)] border-t border-transparent group-hover:border-white/06 transition-colors">
-        <p className="font-medium text-[#fcfdff] my-3 leading-relaxed">{experience.summary}</p>
-
-        <ul className="space-y-2 mb-4">
-          {experience.highlights.map((h) => (
-            <li key={h} className="flex items-start gap-2 text-xs text-[#a1a4a5]">
-              <span className="size-1.5 rounded-full bg-[#3b9eff] shrink-0 mt-1.5" />
-              <span className="text-[#fcfdff] leading-relaxed">{h}</span>
-            </li>
-          ))}
-        </ul>
-
-        <div className="flex flex-wrap gap-1.5 items-center pt-2">
-          {experience.stack.map((t) => (
-            <SkillIcon key={t} name={t} size="sm" showLabel={false} />
-          ))}
-        </div>
-      </AccordionContent>
-    </AccordionItem>
-  );
-}
-
-export const Experience = memo(function Experience() {
-  return (
-    <section
-      aria-labelledby="experience-heading"
-      id="experience"
-      className="relative overflow-hidden w-full py-6"
-    >
-      <SectionBackground variant="experience" />
-      <div className="relative z-10">
-        <SectionHeading id="experience-heading">Experience</SectionHeading>
-
-        <div className="px-4 py-4 sm:px-6">
-          <Accordion type="multiple" defaultValue={["exp-0"]} className="w-full space-y-1">
-            {experiences.map((exp, i) => (
-              <ExperienceRow key={exp.role + exp.company} experience={exp} index={i} />
-            ))}
-          </Accordion>
-        </div>
+            <div>
+              <div className="company-line">
+                <img src={job.logo} alt="" width="28" height="28" />
+                <span>{job.company}</span>
+              </div>
+              <h3>{job.role}</h3>
+              <p className="work-description">
+                {index === 0
+                  ? "Multilingual safety, AI investigation and full-stack product engineering."
+                  : "Retrieval systems, cloud deployments and a full-stack platform migration."}
+              </p>
+              <ul className="outcome-list">
+                {outcomes[index]?.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              <div className="work-stack">
+                {job.stack.slice(0, 5).map((tech) => (
+                  <span key={tech}>{tech}</span>
+                ))}
+              </div>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
   );
-});
+}

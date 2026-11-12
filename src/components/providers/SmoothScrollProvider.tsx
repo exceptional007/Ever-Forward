@@ -1,35 +1,36 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
+import "lenis/dist/lenis.css";
+import { gsap, ScrollTrigger, setSmoothScroller } from "@/lib/gsap-motion";
 
 export function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
-    // Only initialize smooth scroll on non-reduced-motion environments
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mediaQuery.matches) return;
-
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: "vertical",
-      gestureOrientation: "vertical",
-      smoothWheel: true,
-      wheelMultiplier: 1.1,
-      touchMultiplier: 1.5,
+    const media = gsap.matchMedia();
+    media.add("(prefers-reduced-motion: no-preference)", () => {
+      const lenis = new Lenis({
+        duration: 0.9,
+        easing: (t) => 1 - Math.pow(1 - t, 4),
+        smoothWheel: true,
+        syncTouch: false,
+        wheelMultiplier: 1,
+        autoRaf: false,
+        anchors: { offset: -88, duration: 0.85 },
+        prevent: (node) =>
+          Boolean(
+            node.closest('[data-lenis-prevent], [role="dialog"], [cmdk-list], [data-chat-scroll]'),
+          ),
+      });
+      setSmoothScroller(lenis);
+      lenis.on("scroll", ScrollTrigger.update);
+      const tick = (seconds: number) => lenis.raf(seconds * 1000);
+      gsap.ticker.add(tick);
+      return () => {
+        gsap.ticker.remove(tick);
+        setSmoothScroller(null);
+        lenis.destroy();
+      };
     });
-
-    let rafId: number;
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-
-    rafId = requestAnimationFrame(raf);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      lenis.destroy();
-    };
+    return () => media.revert();
   }, []);
-
   return <>{children}</>;
 }

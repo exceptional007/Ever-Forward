@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useState, type ReactElement } from "react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export type SkillIconProps = {
@@ -12,7 +12,7 @@ export type SkillIconProps = {
 // Skill Icon Mapping containing Devicon CDN slugs or Custom SVGs
 type IconMeta = {
   url?: string;
-  svg?: JSX.Element;
+  svg?: ReactElement;
   glowColor: string;
   brightFilter?: boolean;
 };

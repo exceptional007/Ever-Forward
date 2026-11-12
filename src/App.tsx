@@ -1,4 +1,6 @@
-import { useEffect, useState, useCallback, lazy, Suspense } from "react";
+import { usePortfolioNavigation } from "@/hooks/use-portfolio-navigation";
+import { MotionCanvas } from "@/components/animations/MotionCanvas";
+import { lazy, Suspense } from "react";
 import { CommandPalette, useCommandPalette } from "@/components/layout/CommandPalette";
 import { Footer } from "@/components/layout/Footer";
 import { Navbar } from "@/components/layout/Navbar";
@@ -23,7 +25,6 @@ const Skills = lazy(() =>
 const Achievements = lazy(() =>
   import("@/components/sections/Achievements").then((m) => ({ default: m.Achievements })),
 );
-const Faq = lazy(() => import("@/components/sections/Faq").then((m) => ({ default: m.Faq })));
 const Contact = lazy(() =>
   import("@/components/sections/Contact").then((m) => ({ default: m.Contact })),
 );
@@ -38,45 +39,7 @@ import { SectionSkeleton } from "@/components/ui/SectionSkeleton";
 
 function App() {
   const { open, setOpen } = useCommandPalette();
-  const [view, setView] = useState<"home" | "cv">(() => {
-    if (typeof window !== "undefined" && window.location.hash === "#cv") {
-      return "cv";
-    }
-    return "home";
-  });
-
-  useEffect(() => {
-    const handleHashChange = () => {
-      if (window.location.hash === "#cv") {
-        setView("cv");
-      } else {
-        setView("home");
-      }
-    };
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
-
-  const handleNavigate = useCallback(
-    (id: string) => {
-      if (id === "cv") {
-        window.location.hash = "#cv";
-        setView("cv");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      } else {
-        if (view === "cv") {
-          window.location.hash = id === "hero" ? "" : `#${id}`;
-          setView("home");
-          setTimeout(() => {
-            document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }, 50);
-        } else {
-          document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      }
-    },
-    [view],
-  );
+  const { view, main, navigate: handleNavigate } = usePortfolioNavigation();
 
   return (
     <ThemeProvider>
@@ -117,43 +80,36 @@ function App() {
               <CommandPalette open={open} onOpenChange={setOpen} />
 
               {/* Editorial Canvas Container */}
-              <div className="mx-auto w-full max-w-4xl px-4 sm:px-6">
-                <main id="main" className="relative z-10 w-full flex flex-col">
-                  {view === "home" ? (
-                    <>
-                      {/* Above-the-fold Hero Section */}
-                      <Hero />
+              <div className="mx-auto w-full max-w-6xl px-5 sm:px-8">
+                <main ref={main} id="main" className="relative z-10 w-full flex flex-col">
+                  <MotionCanvas view={view}>
+                    {view === "home" ? (
+                      <>
+                        {/* Above-the-fold Hero Section */}
+                        <Hero />
 
-                      <Suspense fallback={<SectionSkeleton />}>
-                        <HatchRule />
-                        <About />
-
-                        <HatchRule />
-                        <Experience />
-
-                        <HatchRule />
-                        <Projects />
-
-                        <HatchRule />
-                        <Skills />
-
-                        <HatchRule />
-                        <Achievements />
-
-                        <HatchRule />
-                        <Faq />
-
-                        <HatchRule />
-                        <Contact />
-                      </Suspense>
-                    </>
-                  ) : (
-                    <div className="py-4 min-h-[75vh]">
-                      <Suspense fallback={<SectionSkeleton />}>
-                        <Resume />
-                      </Suspense>
-                    </div>
-                  )}
+                        <Suspense fallback={<SectionSkeleton />}>
+                          <Projects />
+                          <HatchRule />
+                          <Experience />
+                          <HatchRule />
+                          <Skills />
+                          <HatchRule />
+                          <Achievements />
+                          <HatchRule />
+                          <About />
+                          <HatchRule />
+                          <Contact />
+                        </Suspense>
+                      </>
+                    ) : (
+                      <div className="py-4 min-h-[75vh]">
+                        <Suspense fallback={<SectionSkeleton />}>
+                          <Resume />
+                        </Suspense>
+                      </div>
+                    )}
+                  </MotionCanvas>
                 </main>
 
                 <Footer />
